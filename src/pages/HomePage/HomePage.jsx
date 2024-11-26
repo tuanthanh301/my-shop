@@ -68,12 +68,11 @@ const HomePage = () => {
             type="outline"
             style={{
               border: "1px solid rgb(11, 116, 229)",
-              color: "rgb(11, 116, 229)",
               width: "240px",
               height: "38px",
               borderRadius: "4px",
             }}
-            styleTextButton={{ fontWeight: 500 }}
+            styleTextButton={{ color: "rgb(11, 116, 229)",fontWeight: 500 }}
           />
         </div>
 
