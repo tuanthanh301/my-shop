@@ -6,24 +6,23 @@ export const WrapperTypeProduct = styled.div`
   align-items: center;
   gap: 24px;
   justify-content: flex-start;
-  /* border-bottom: 1px solid; */
   height: 44px;
 `;
 export const WrapperButtonMore = styled(ButtonComponent)`
   &:hover {
     background: rgb(13, 92, 182);
     color: #fff;
-
     span {
       color: #fff;
     }
   } 
+  width: 100%;
+  text-align: center;
 
 `;
 export const WrapperProducts = styled.div`
   display: flex;
-  justify-content: center;
-  gap: 15px;
+  gap: 10px;
   margin-top: 20px;
   flex-wrap: wrap;
 `;

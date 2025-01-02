@@ -16,7 +16,7 @@ const HomePage = () => {
   const arr = ["TV", "Tủ lạnh", "Laptop"];
   return (
     <>
-      <div style={{ padding: "0 120px" }}>
+      <div style={{ width: "1270px", margin: "0 auto" }}>
         <WrapperTypeProduct>
           {arr.map((item) => {
             return (
@@ -26,58 +26,60 @@ const HomePage = () => {
           })}
         </WrapperTypeProduct>
       </div>
-      <div
-        id="container"
-        style={{
-          padding: "0 120px",
-          backgroundColor: "#efefef",
-          height: "1000px",
-        }}
-      >
-        <SliderComponent arrImages={[slider, slider2, slider3]} />
-        <WrapperProducts
-          style={{
-            marginTop: "20px",
-            display: "flex",
-            alignItems: "center",
-            gap: "20px",
-            flexWrap: "wrap",
-          }}
-        >
-          <CardComponent />
-          <CardComponent />
-          <CardComponent />
-          <CardComponent />
-          <CardComponent />
-          <CardComponent />
-          <CardComponent />
-          <CardComponent />
-          <CardComponent />
-          <CardComponent />
-        </WrapperProducts>
+      {/* <div
+        className="body"
+        style={{ width: "1270px", backgroundColor: "#efefef" }}
+      > */}
         <div
+          id="container"
           style={{
-            width: "100%",
-            display: "flex",
-            justifyContent: "center",
-            marginTop: "10px",
+            height: '1000px',
+            width: "1270px",
+            margin: "0 auto"
           }}
         >
-          <WrapperButtonMore
-            textButton="Xem thêm"
-            type="outline"
+          <SliderComponent arrImages={[slider, slider2, slider3]} />
+          <WrapperProducts
             style={{
-              border: "1px solid rgb(11, 116, 229)",
-              width: "240px",
-              height: "38px",
-              borderRadius: "4px",
+              marginTop: "20px",
+              display: "flex",
+              alignItems: "center",
+              gap: "20px",
+              flexWrap: "wrap",
             }}
-            styleTextButton={{ color: "rgb(11, 116, 229)",fontWeight: 500 }}
-          />
-        </div>
+          >
+            <CardComponent />
+            <CardComponent />
+            <CardComponent />
+            <CardComponent />
+            <CardComponent />
+            <CardComponent />
 
-        {/* <NavBarComponent/> */}
-      </div>
+          </WrapperProducts>
+          <div
+            style={{
+              width: "100%",
+              display: "flex",
+              justifyContent: "center",
+              marginTop: "10px",
+            }}
+          >
+            <WrapperButtonMore
+              textButton="Xem thêm"
+              type="outline"
+              style={{
+                border: "1px solid rgb(11, 116, 229)",
+                width: "240px",
+                height: "38px",
+                borderRadius: "4px",
+              }}
+              styleTextButton={{ color: "rgb(11, 116, 229)", fontWeight: 500 }}
+            />
+          </div>
+
+          {/* <NavBarComponent/> */}
+        </div>
+      {/* </div> */}
     </>
   );
 };
