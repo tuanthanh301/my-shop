@@ -6,6 +6,7 @@ export const WrapperInputStyle = styled(Input)`
     border-right: none;
     border-top: none;
     border-radius: 0;
+    /* border: none; */
     outline: none;
     margin-bottom: 10px;
     &:focus {

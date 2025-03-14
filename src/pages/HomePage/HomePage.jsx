@@ -10,10 +10,24 @@ import slider from "../../assets/images/slider.webp";
 import slider2 from "../../assets/images/slider2.webp";
 import slider3 from "../../assets/images/slider3.webp";
 import CardComponent from "../../components/CardProduct/CardComponent";
+import { useQuery } from "@tanstack/react-query";
 // import NavBarComponent from "../../components/NavBarComponent/NavBarComponent";
+import * as ProductService from "../../services/ProductService";
 
 const HomePage = () => {
-  const arr = ["TV", "Tủ lạnh", "Laptop"];
+  const arr = ["Dell", "Asus", "Macbook"];
+  const fetchProductAll = async () => {
+    const response = await ProductService.getAllProduct(); // Gọi hàm đúng cách
+    return response; // ✅ Trả về dữ liệu
+  };
+  
+  const { data: products, isLoading } = useQuery({
+    queryKey: ["products"],
+    queryFn: fetchProductAll,
+    retry: 3, // Số lần thử lại nếu lỗi
+    retryDelay: 1000,
+  });
+ 
   return (
     <>
       <div style={{ width: "1270px", margin: "0 auto" }}>
@@ -48,13 +62,23 @@ const HomePage = () => {
               flexWrap: "wrap",
             }}
           >
-            <CardComponent />
-            <CardComponent />
-            <CardComponent />
-            <CardComponent />
-            <CardComponent />
-            <CardComponent />
+            {products?.data?.map((product) =>{
+              return (
+                <CardComponent
+                  key={product._id}
+                  countInStock={product.countInStock}
+                  description={product.description}
+                  image={product.image}
+                  name={product.name}
+                  price={product.price}
+                  rating={product.rating}
+                  type={product.type}
+                  discount={product.discount}
+                  sold={product.sold}
 
+                />
+              )
+            })}
           </WrapperProducts>
           <div
             style={{

@@ -52,7 +52,7 @@ const NavBarComponent = () => {
     <div>
       <WrapperLabelText>Danh mục sản phẩm</WrapperLabelText>
       <WrapperContent>
-        {renderContent("text", ["Tủ lạnh", "Laptop", "Macbook"])}
+        {renderContent("text", ["Dell", "Asus", "Macbook"])}
       </WrapperContent>
       <WrapperContent>
         {renderContent("checkbox", [

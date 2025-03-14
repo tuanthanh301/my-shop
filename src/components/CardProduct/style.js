@@ -5,7 +5,7 @@ export const WrapperCardStyle = styled(Card)`
   & img {
     width: 200px;
     height: 200px;
-  },
+  }
   position: relative;
 ` 
 export const StyleNameProduct = styled.div`

@@ -20,7 +20,7 @@ const ProductDetailsComponent = () => {
   const onChange = () => {};
 
   return (
-    <Row style={{ padding: "16px", backgroundColor: "#fff", borderRadius:"4px" }}>
+    <Row style={{  backgroundColor: "#fff", borderRadius:"4px" }}>
       <Col span={10} style={{borderRight: "1px solid #e5e5e5", paddingRight: "8px"}}>
         <Image src={imageProduct} alt="image-product" preview={false} />
         <Row
@@ -114,8 +114,7 @@ const ProductDetailsComponent = () => {
         </div>
         <div style={{display: 'flex', alignItems: "center", gap:"12px"}}>
           <ButtonComponent
-            border={false}
-            size={40}
+            // size={40}
             style={{
               backgroundColor: "rgb(255,57,69)",
               height: "48px",
@@ -131,8 +130,7 @@ const ProductDetailsComponent = () => {
             }}
           ></ButtonComponent>
           <ButtonComponent
-            border={false}
-            size={40}
+            // size={40}
             style={{
               backgroundColor: "rgb(255, 255, 255);",
               height: "48px",
