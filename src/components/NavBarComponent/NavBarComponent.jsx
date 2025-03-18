@@ -18,7 +18,7 @@ const NavBarComponent = () => {
       case "checkbox":
         return (
           <Checkbox.Group
-            style={{ width: "100%", display: "flex", flexDirection: "column" }}
+            style={{ width: "100%", display: "flex", flexDirection: "column" }}xq
             onChange={onChange}
           >
             {options.map((option) => {

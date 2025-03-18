@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 
-import { Button, Form, Input, Space } from "antd";
+import { Button, Form, Input, Select, Space } from "antd";
 import {
   DeleteOutlined,
   EditOutlined,
@@ -10,7 +10,7 @@ import {
 import TableComponent from "../TableComponent/TableComponent";
 import { WrapperHeader, WrapperUploadFile } from "./style";
 import InputComponents from "../InputComponents/InputComponents";
-import { getBase64 } from "../../ultils";
+import { getBase64, renderOptions } from "../../ultils";
 import * as ProductService from "../../services/ProductService";
 import { useMutationHook } from "../../hooks/useMutationHook";
 // import Loading from "../LoadingComponent/Loading";
@@ -27,10 +27,9 @@ const AdminProduct = () => {
   const [isOpenDrawer, setIsOpenDrawer] = useState(false);
   const [isLoadingUpdate, setIsLoadingUpdate] = useState(false);
   const [isModalOpenDelete, setIsModalOpenDelete] = useState(false);
-  const user = useSelector((state) => state?.user);
+  const [typeSelect, setTypeSelect] = useState("");
 
-  const [searchText, setSearchText] = useState("");
-  const [searchedColumn, setSearchedColumn] = useState("");
+  const user = useSelector((state) => state?.user);
   const searchInput = useRef(null);
 
   const [stateProduct, setStateProduct] = useState({
@@ -41,6 +40,7 @@ const AdminProduct = () => {
     description: "",
     rating: "",
     image: "",
+    newType: "",
   });
   const [stateProductDetails, setStateProductDetails] = useState({
     name: "",
@@ -87,7 +87,7 @@ const AdminProduct = () => {
     return res;
   });
   const mutationDeletedMany = useMutationHook((data) => {
-    const { ids, token, } = data;
+    const { ids, token } = data;
     const res = ProductService.deleteManyProduct({
       ids,
       token,
@@ -142,7 +142,10 @@ const AdminProduct = () => {
       }
     );
   };
-
+  const fetchAllTypeProduct = async () => {
+    const res = await ProductService.getAllTypeProduct();
+    return res;
+  };
   const { data, isLoading, isSuccess, isError } = mutation;
   const {
     data: dataUpdated,
@@ -162,10 +165,17 @@ const AdminProduct = () => {
     isSuccess: isSuccessDeletedMany,
     isError: isErrorDeletedMany,
   } = mutationDeletedMany;
+
   const queryProduct = useQuery({
     queryKey: ["products"],
     queryFn: getAllProducts,
   });
+
+  const typeProduct = useQuery({
+    queryKey: ["type-product"],
+    queryFn: fetchAllTypeProduct,
+  });
+
   const { isLoading: isLoadingProducts, data: products } = queryProduct;
   const renderAction = () => {
     return (
@@ -188,6 +198,7 @@ const AdminProduct = () => {
       </div>
     );
   };
+  console.log("type", typeProduct);
   const handleSearch = (selectedKeys, confirm, dataIndex) => {
     confirm();
     // setSearchText(selectedKeys[0]);
@@ -418,18 +429,50 @@ const AdminProduct = () => {
     form.resetFields();
   };
   const onFinish = () => {
-    mutation.mutate(stateProduct, {
+    const params = {
+      name: stateProduct.name,
+      price: stateProduct.price,
+      description: stateProduct.description,
+      rating: stateProduct.rating,
+      image: stateProduct.image,
+      type:
+        stateProduct.type === "add_type"
+          ? stateProduct.newType
+          : stateProduct.type,
+      countInStock: stateProduct.countInStock,
+    };
+    mutation.mutate(params, {
       onSettled: () => {
         queryProduct.refetch();
+        // form.resetFields(); // Reset form
+        // setStateProduct({// Reset state
+        //   name: "",
+        //   price: "",
+        //   description: "",
+        //   rating: "",
+        //   image: "",
+        //   type: "",
+        //   newType: "",
+        //   countInStock: "",
+        // });
+        handleCancel()
       },
     });
   };
+  // const handleOnChange = (e) => {
+  //   setStateProduct({
+  //     ...stateProduct,
+  //     [e.target.name]: e.target.value,
+  //   });
+  // };
   const handleOnChange = (e) => {
-    setStateProduct({
-      ...stateProduct,
-      [e.target.name]: e.target.value,
-    });
+    const { name, value } = e.target;
+    setStateProduct((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
   };
+
   const handleOnChangeDetails = (e) => {
     setStateProductDetails({
       ...stateProductDetails,
@@ -446,16 +489,37 @@ const AdminProduct = () => {
       image: file.preview,
     });
   };
-  const handleOnChangeAvatarDetails = async ({ fileList }) => {
-    const file = fileList[0];
-    if (!file.url && !file.preview) {
-      file.preview = await getBase64(file.originFileObj);
+  // const handleOnChangeAvatarDetails = async ({ fileList }) => {
+  //   const file = fileList[0];
+  //   if (!file.url && !file.preview) {
+  //     file.preview = await getBase64(file.originFileObj);
+  //   }
+  //   setStateProductDetails({
+  //     ...stateProductDetails,
+  //     image: file.preview,
+  //   });
+  // };
+  const handleOnChangeAvatarDetails = ({ fileList }) => {
+    // Nếu có file mới, lấy file đó để cập nhật
+    if (fileList.length > 0) {
+      const file = fileList[0];
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        setStateProductDetails((prev) => ({
+          ...prev,
+          image: e.target.result, // Cập nhật URL ảnh mới
+        }));
+      };
+      reader.readAsDataURL(file.originFileObj); // Chuyển file thành Data URL
+    } else {
+      // Nếu xóa hết ảnh
+      setStateProductDetails((prev) => ({
+        ...prev,
+        image: null,
+      }));
     }
-    setStateProductDetails({
-      ...stateProductDetails,
-      image: file.preview,
-    });
   };
+
   const onUpdateProduct = () => {
     mutationUpdate.mutate(
       {
@@ -470,6 +534,13 @@ const AdminProduct = () => {
       }
     );
   };
+  const handleChangeSelect = (value) => {
+    setStateProduct({
+      ...stateProduct,
+      type: value,
+    });
+  };
+  console.log("stateProduct.type", stateProduct);
   return (
     <div style={{ width: "100%" }}>
       <WrapperHeader>Quản lý sản phẩm</WrapperHeader>
@@ -556,12 +627,32 @@ const AdminProduct = () => {
               },
             ]}
           >
-            <InputComponents
-              value={stateProduct.type}
-              onChange={handleOnChange}
+            <Select
               name="type"
+              value={stateProduct.type}
+              onChange={handleChangeSelect}
+              options={renderOptions(typeProduct?.data?.data)}
             />
           </Form.Item>
+          {stateProduct.type === "add_type" && (
+            <Form.Item
+              label="New type"
+              name="newType"
+              rules={[
+                {
+                  required: true,
+                  message: "Please input product type!",
+                },
+              ]}
+            >
+              <InputComponents
+                value={stateProduct.newType}
+                onChange={handleOnChange}
+                name="newType"
+              />
+            </Form.Item>
+          )}
+
           <Form.Item
             label="Count in stock"
             name="countInStock"
@@ -804,12 +895,20 @@ const AdminProduct = () => {
             <WrapperUploadFile
               fileList={
                 stateProductDetails.image
-                  ? [{ uid: "-1", url: stateProductDetails.image }]
+                  ? [
+                      {
+                        uid: "-1",
+                        url: stateProductDetails.image,
+                        name: "image",
+                        status: "done",
+                      },
+                    ]
                   : []
               }
               onChange={handleOnChangeAvatarDetails}
               maxCount={1}
               listType="picture-card"
+              beforeUpload={() => false} // Ngăn tải lên tự động
             >
               {!stateProductDetails.image && <Button>Select File</Button>}
             </WrapperUploadFile>

@@ -6,7 +6,7 @@ export const WrapperStyleImageSmall = styled(Image)`
   width: 64px;
 `;
 export const WrapperStyleColImage = styled(Col)`
-    flex-basis: unset:
+    flex-basis: unset;
     display: flex;
 `;
 export const WrapperStyleNameProduct = styled.h1`
@@ -44,12 +44,12 @@ export const WrapperAddressProduct = styled.div`
     overflow: hidden;
     text-overflow: ellipsis;
   }
-  ,
   span.change-address {
     color: rgb(11, 116, 229);
     font-size: 16px;
     line-height: 24px;
     font-weight: 500;
+    cursor: pointer;
   }
 `;
 export const WrapperQualityProduct = styled.div`
@@ -64,12 +64,12 @@ export const WrapperQualityProduct = styled.div`
 
 export const WrapperInputNumber = styled(InputNumber)`
   &.ant-input-number-outlined {
-    width: 70px;
+    width: 40px;
     border-top: none;
     border-bottom: none;
     border-radius: 0;
     &.ant-input-number-handler-wrap {
-      display: none;
+      display: none !important;
     }
   }
 `;
