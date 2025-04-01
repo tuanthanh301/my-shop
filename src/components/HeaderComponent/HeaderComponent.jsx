@@ -29,8 +29,9 @@ const HeaderComponent = ({ isHiddenSearch = false, isHiddenCart = false }) => {
   const [userName, setUserName] = useState("");
   const [userAvatar, setUserAvatar] = useState("");
   const [loading, setLoading] = useState(false);
-
   const [search, setSearch] = useState("");
+  const order = useSelector((state) => state.order);
+
   const handleNavigateLogin = () => {
     navigate("/sign-in");
   };
@@ -90,7 +91,7 @@ const HeaderComponent = ({ isHiddenSearch = false, isHiddenCart = false }) => {
             <Button
               style={{
                 backgroundColor: "transparent",
-                color: 'white',
+                color: "white",
                 border: "none",
                 cursor: "pointer",
                 fontSize: "20px",
@@ -163,8 +164,16 @@ const HeaderComponent = ({ isHiddenSearch = false, isHiddenCart = false }) => {
             </WrapperHeaderAccount>
           </Loading>
           {!isHiddenCart && (
-            <div onClick={() => navigate('/order')} style={{ display: "flex", alignItems: "center", cursor: 'pointer' }}>
-              <Badge count={6} size="small">
+            <div
+              onClick={() => navigate("/order")}
+              style={{
+                display: "flex",
+                alignItems: "center",
+                cursor: "pointer",
+              }}
+            >
+              <Badge count={order?.orderItem?.reduce(
+                  (total, item) => total + item.amount,0)} size="small">
                 <ShoppingCartOutlined
                   style={{ fontSize: "30px", color: "#fff" }}
                 />

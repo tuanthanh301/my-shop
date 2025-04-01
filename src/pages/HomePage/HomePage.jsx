@@ -19,7 +19,7 @@ import { useDebounce } from "../../hooks/useDebounce";
 
 const HomePage = () => {
   const searchProduct = useSelector((state) => state?.product?.search);
-  const searchDebounce = useDebounce(searchProduct, 1000);
+  const searchDebounce = useDebounce(searchProduct, 500);
   // const [loading, setLoading] = useState(false);
   const [limit, setLimit] = useState(5);
   const [typeProducts, setTypeProducts] = useState([]);
@@ -82,7 +82,7 @@ const HomePage = () => {
             marginTop: "20px",
             display: "flex",
             alignItems: "center",
-            gap: "20px",
+            gap: "23px",
             flexWrap: "wrap",
           }}
         >

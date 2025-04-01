@@ -17,12 +17,18 @@ import { MinusOutlined, PlusOutlined } from "@ant-design/icons";
 import ButtonComponent from "../ButtonComponent/ButtonComponent";
 import { useQuery } from "@tanstack/react-query";
 import Loading from "../LoadingComponent/Loading";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { useLocation, useNavigate } from "react-router-dom";
+import { addOrderProduct } from "../../redux/slides/orderSlide";
+import { convertPrice } from '../../ultils'
 
 const ProductDetailsComponent = ({ idProduct }) => {
   const [numberProduct, setNumberProduct] = useState(1)
   const user = useSelector((state) => state.user)
-  console.log('user',user)
+
+  const navigate = useNavigate()
+  const location = useLocation()
+  const dispatch = useDispatch()
   const onChange = (value) => {
     setNumberProduct(Number(value))
   };
@@ -40,13 +46,38 @@ const ProductDetailsComponent = ({ idProduct }) => {
   });
   const handleChangeCount = (type) => {
     if ( type === 'increase'){
-      setNumberProduct(numberProduct + 1)
+      setNumberProduct(numberProduct + 1)  
     } else {
       setNumberProduct(numberProduct - 1)
-
     }
-
   }
+  const handleAddOrderProduct =() => {
+    if(!user?.id){
+      navigate('/sign-in', {state: location?.pathname })
+    } else  {
+    //   {
+    //     name: {type: String, required: true},
+    //     amount: {type: Number, required: true},
+    //     image: {type: String, required: true},
+    //     price: {type: Number, required: true},
+    //     product: {
+    //         type: mongoose.Schema.Types.ObjectId,
+    //         ref: 'Product',
+    //         required: true,
+    //     },
+    // },
+      dispatch(addOrderProduct ({
+        orderItem: {
+            name: productsDetails?.name,
+            amount: numberProduct,
+            image: productsDetails?.image,
+            price: productsDetails.price,
+            product: productsDetails?._id
+        }
+      }))
+    }
+  }
+  console.log('productsDetails',productsDetails, user)
   return (
     <Loading isLoading={isLoading}>
       <Row style={{ backgroundColor: "#fff", borderRadius: "4px" }}>
@@ -117,7 +148,7 @@ const ProductDetailsComponent = ({ idProduct }) => {
           <WrapperStyleTextSold> | Đã bán 1000+</WrapperStyleTextSold>
           </div>
           <WrapperPriceProduct>
-            <WrapperPriceTextProduct>{productsDetails?.price}$</WrapperPriceTextProduct>
+            <WrapperPriceTextProduct>{convertPrice(productsDetails?.price)}</WrapperPriceTextProduct>
           </WrapperPriceProduct>
           <WrapperAddressProduct>
             <span>Giao đến: </span>
@@ -159,6 +190,7 @@ const ProductDetailsComponent = ({ idProduct }) => {
                 border: " none",
                 borderRadius: "4px",
               }}
+              onClick={handleAddOrderProduct}
               textButton={"Chọn mua"}
               styleTextButton={{
                 color: "#fff",

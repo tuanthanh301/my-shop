@@ -24,7 +24,6 @@ const NavBarComponent = () => {
             {options.map((option) => {
               return <Checkbox value={option.value}>{option.label}</Checkbox>;
             })}
-            {/* <Checkbox value="B">B</Checkbox> */}
           </Checkbox.Group>
         );
       case "star":
@@ -54,16 +53,7 @@ const NavBarComponent = () => {
       <WrapperContent>
         {renderContent("text", ["Dell", "Asus", "Macbook"])}
       </WrapperContent>
-      <WrapperContent>
-        {renderContent("checkbox", [
-          { value: "a", label: "A" },
-          { value: "b", label: "B" },
-        ])}
-      </WrapperContent>
-      <WrapperContent>{renderContent("star", [3, 4, 5])}</WrapperContent>
-      <WrapperContent>
-        {renderContent("price", ["dưới 40,000 000", "trên 50,000 000"])}
-      </WrapperContent>
+     
     </div>
   );
 };

@@ -90,7 +90,7 @@ const ProfilePage = () => {
       {/* <Loading isLoading={isLoading}> */}
       <WrapperContentProfile>
         <WrapperInput>
-          <WrapperLabel htmlFor="name">Name</WrapperLabel>
+          <WrapperLabel htmlFor="name">Name: </WrapperLabel>
           <InputForm
             id="name"
             style={{ border: "none", marginBottom: "0px", width: "300px" }}
@@ -117,7 +117,7 @@ const ProfilePage = () => {
           ></ButtonComponent>
         </WrapperInput>
         <WrapperInput>
-          <WrapperLabel htmlFor="email">Email</WrapperLabel>
+          <WrapperLabel htmlFor="email">Email: </WrapperLabel>
           <InputForm
             id="email"
             style={{ border: "none", marginBottom: "0px", width: "300px" }}
@@ -144,7 +144,7 @@ const ProfilePage = () => {
           ></ButtonComponent>
         </WrapperInput>
         <WrapperInput>
-          <WrapperLabel htmlFor="phone">Phone</WrapperLabel>
+          <WrapperLabel htmlFor="phone">Phone: </WrapperLabel>
           <InputForm
             id="phone"
             style={{ border: "none", marginBottom: "0px", width: "300px" }}
@@ -171,7 +171,7 @@ const ProfilePage = () => {
           ></ButtonComponent>
         </WrapperInput>
         <WrapperInput>
-          <WrapperLabel htmlFor="avatar">Avatar</WrapperLabel>
+          <WrapperLabel htmlFor="avatar">Avatar: </WrapperLabel>
           <WrapperUploadFile onChange={handleOnChangeAvatar} maxCount={1}>
             <Button icon={<UploadOutlined />}>Select File</Button>
           </WrapperUploadFile>
@@ -195,6 +195,7 @@ const ProfilePage = () => {
             // size={50}
             style={{
               height: "30px",
+              marginLeft: '100px',
               width: "fit-content",
               border: "1px solid rgb(26,148,255)",
               borderRadius: "4px",
@@ -209,7 +210,7 @@ const ProfilePage = () => {
           ></ButtonComponent>
         </WrapperInput>
         <WrapperInput>
-          <WrapperLabel htmlFor="address">Address</WrapperLabel>
+          <WrapperLabel htmlFor="address">Address: </WrapperLabel>
           <InputForm
             id="address"
             style={{ border: "none", marginBottom: "0px", width: "300px" }}

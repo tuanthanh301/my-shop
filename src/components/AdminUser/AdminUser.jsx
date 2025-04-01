@@ -17,7 +17,7 @@ import { useQuery } from "@tanstack/react-query";
 import DrawerComponent from "../DrawerComponent/DrawerComponent";
 import { useSelector } from "react-redux";
 import ModalComponent from "../ModalComponent/ModalComponent";
-import Search from "antd/es/transfer/search";
+// import Search from "antd/es/transfer/search";
 const AdminUser = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [rowSelected, setRowSelected] = useState("");
@@ -67,7 +67,7 @@ const AdminUser = () => {
       return res;
     });
   const getAllUsers = async () => {
-    const res = await UserService.getAllUser();
+    const res = await UserService.getAllUser(user?.access_token);
     return res;
   };
   const fetchGetDetailsUser = async (rowSelected) => {

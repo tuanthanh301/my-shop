@@ -15,17 +15,17 @@ const ProductDetailsPage = () => {
           height: "1000px",
         }}
       >
-        <p style={{ marginTop: "0px" }}>
-          <span
+        <h3 style={{ marginTop: "0px" }}>
+          {/* <span
             style={{ cursor: "pointer", fontWeight: "bold" }}
             onClick={() => {
               navigate("/");
             }}
           >
             Trang chủ
-          </span>
-          - Chi tiết sản phẩm
-        </p>
+          </span> */}
+          Chi tiết sản phẩm
+        </h3>
         <ProductDetailsComponent idProduct={id} />
       </div>
     </div>

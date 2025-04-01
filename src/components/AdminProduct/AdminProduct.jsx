@@ -13,7 +13,7 @@ import InputComponents from "../InputComponents/InputComponents";
 import { getBase64, renderOptions } from "../../ultils";
 import * as ProductService from "../../services/ProductService";
 import { useMutationHook } from "../../hooks/useMutationHook";
-// import Loading from "../LoadingComponent/Loading";
+import Loading from "../LoadingComponent/Loading";
 import * as message from "../../components/Message/Message";
 import { useQuery } from "@tanstack/react-query";
 import DrawerComponent from "../DrawerComponent/DrawerComponent";
@@ -27,7 +27,6 @@ const AdminProduct = () => {
   const [isOpenDrawer, setIsOpenDrawer] = useState(false);
   const [isLoadingUpdate, setIsLoadingUpdate] = useState(false);
   const [isModalOpenDelete, setIsModalOpenDelete] = useState(false);
-  const [typeSelect, setTypeSelect] = useState("");
 
   const user = useSelector((state) => state?.user);
   const searchInput = useRef(null);
@@ -38,6 +37,7 @@ const AdminProduct = () => {
     countInStock: "",
     price: "",
     description: "",
+    discount: "",
     rating: "",
     image: "",
     newType: "",
@@ -48,6 +48,7 @@ const AdminProduct = () => {
     countInStock: "",
     price: "",
     description: "",
+    discount: "",
     rating: "",
     image: "",
   });
@@ -55,7 +56,7 @@ const AdminProduct = () => {
   const [form] = Form.useForm();
 
   const mutation = useMutationHook((data) => {
-    const { name, type, countInStock, price, description, rating, image } =
+    const { name, type, countInStock, price, description, discount, rating, image } =
       data;
     const res = ProductService.createProduct({
       name,
@@ -63,6 +64,7 @@ const AdminProduct = () => {
       countInStock,
       price,
       description,
+      discount,
       rating,
       image,
     });
@@ -95,7 +97,7 @@ const AdminProduct = () => {
     return res;
   });
   const getAllProducts = async () => {
-    const res = await ProductService.getAllProduct();
+    const res = await ProductService.getAllProduct("",100);
     return res;
   };
   const fetchGetDetailsProduct = async (rowSelected) => {
@@ -109,6 +111,7 @@ const AdminProduct = () => {
         description: res?.data.description,
         rating: res?.data.rating,
         image: res?.data.image,
+        discount: res?.data.discount
       });
     }
     setIsLoadingUpdate(false);
@@ -198,7 +201,6 @@ const AdminProduct = () => {
       </div>
     );
   };
-  console.log("type", typeProduct);
   const handleSearch = (selectedKeys, confirm, dataIndex) => {
     confirm();
     // setSearchText(selectedKeys[0]);
@@ -380,6 +382,7 @@ const AdminProduct = () => {
       countInStock: "",
       price: "",
       description: "",
+      discount:"",
       rating: "",
       image: "",
     });
@@ -440,6 +443,7 @@ const AdminProduct = () => {
           ? stateProduct.newType
           : stateProduct.type,
       countInStock: stateProduct.countInStock,
+      discount: stateProduct.discount
     };
     mutation.mutate(params, {
       onSettled: () => {
@@ -540,7 +544,6 @@ const AdminProduct = () => {
       type: value,
     });
   };
-  console.log("stateProduct.type", stateProduct);
   return (
     <div style={{ width: "100%" }}>
       <WrapperHeader>Quản lý sản phẩm</WrapperHeader>
@@ -702,6 +705,22 @@ const AdminProduct = () => {
             />
           </Form.Item>
           <Form.Item
+            label="Discount"
+            name="discount"
+            rules={[
+              {
+                required: true,
+                message: "Please input product discount!",
+              },
+            ]}
+          >
+            <InputComponents
+              value={stateProduct.discount}
+              onChange={handleOnChange}
+              name="discount"
+            />
+          </Form.Item>
+          <Form.Item
             label="Rating"
             name="rating"
             rules={[
@@ -845,6 +864,22 @@ const AdminProduct = () => {
               value={stateProductDetails.description}
               onChange={handleOnChangeDetails}
               name="description"
+            />
+          </Form.Item>
+          <Form.Item
+            label="Discount"
+            name="discount"
+            rules={[
+              {
+                required: true,
+                message: "Please input product discount!",
+              },
+            ]}
+          >
+            <InputComponents
+              value={stateProduct.discount}
+              onChange={handleOnChange}
+              name="discount"
             />
           </Form.Item>
           <Form.Item

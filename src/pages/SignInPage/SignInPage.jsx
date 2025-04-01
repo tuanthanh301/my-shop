@@ -8,7 +8,7 @@ import {
   WrapperConTainerRight,
   WrapperTextLight,
 } from "./style";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import * as UserService from "../../services/UserService";
 import { useMutationHook } from "../../hooks/useMutationHook";
 // import Loading from "../../components/LoadingComponent/Loading";
@@ -23,7 +23,7 @@ const SignInPage = () => {
   const [isShowPassword, setIsShowPassword] = useState(false);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-
+  const location = useLocation()
   const mutation = useMutationHook((data) => UserService.loginUser(data));
 
   const handldeNavigateSignUp = () => {
@@ -40,7 +40,13 @@ const SignInPage = () => {
   // const [loading, setLoading] = useState(false);
   const { data, isLoading, isSuccess } = mutation;
   useEffect(() =>{
+    console.log('location',location)
     if(isSuccess){
+      if(location?.state){
+        navigate(location?.state)
+      } else {
+        navigate('/')
+      }
       navigate('/')
       localStorage.setItem('access_token', JSON.stringify(data?.access_token))
       if (data?.access_token) {
