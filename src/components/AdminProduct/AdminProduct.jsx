@@ -30,8 +30,7 @@ const AdminProduct = () => {
 
   const user = useSelector((state) => state?.user);
   const searchInput = useRef(null);
-
-  const [stateProduct, setStateProduct] = useState({
+  const initial = () => ({
     name: "",
     type: "",
     countInStock: "",
@@ -41,23 +40,21 @@ const AdminProduct = () => {
     rating: "",
     image: "",
     newType: "",
-  });
-  const [stateProductDetails, setStateProductDetails] = useState({
-    name: "",
-    type: "",
-    countInStock: "",
-    price: "",
-    description: "",
-    discount: "",
-    rating: "",
-    image: "",
-  });
-
+  })
+  const [stateProduct, setStateProduct] = useState(initial());
+  const [stateProductDetails, setStateProductDetails] = useState(initial())
   const [form] = Form.useForm();
-
   const mutation = useMutationHook((data) => {
-    const { name, type, countInStock, price, description, discount, rating, image } =
-      data;
+    const {
+      name,
+      type,
+      countInStock,
+      price,
+      description,
+      discount,
+      rating,
+      image,
+    } = data;
     const res = ProductService.createProduct({
       name,
       type,
@@ -97,7 +94,7 @@ const AdminProduct = () => {
     return res;
   });
   const getAllProducts = async () => {
-    const res = await ProductService.getAllProduct("",100);
+    const res = await ProductService.getAllProduct("", 100);
     return res;
   };
   const fetchGetDetailsProduct = async (rowSelected) => {
@@ -111,20 +108,24 @@ const AdminProduct = () => {
         description: res?.data.description,
         rating: res?.data.rating,
         image: res?.data.image,
-        discount: res?.data.discount
+        discount: res?.data.discount,
       });
     }
     setIsLoadingUpdate(false);
   };
-  // useEffect(()=>{
-  //   form.setFieldsValue(stateProductDetails)
-  // },[form, stateProductDetails])
   useEffect(() => {
-    if (stateProductDetails.name) {
+    if (!isModalOpen) {
       form.setFieldsValue(stateProductDetails);
+    } else {
+      form.setFieldsValue(initial());
     }
-  }, [form, stateProductDetails]);
-
+  }, [form, stateProductDetails, isModalOpen]);
+  // useEffect(() => {
+  //   if (stateProductDetails.name) {
+  //     form.setFieldsValue(stateProductDetails);
+  //   }
+  // }, [form, stateProductDetails]);
+  console.log("state", stateProductDetails, stateProduct);
   useEffect(() => {
     if (rowSelected && isOpenDrawer) {
       setIsLoadingUpdate(true);
@@ -382,7 +383,7 @@ const AdminProduct = () => {
       countInStock: "",
       price: "",
       description: "",
-      discount:"",
+      discount: "",
       rating: "",
       image: "",
     });
@@ -443,7 +444,7 @@ const AdminProduct = () => {
           ? stateProduct.newType
           : stateProduct.type,
       countInStock: stateProduct.countInStock,
-      discount: stateProduct.discount
+      discount: stateProduct.discount,
     };
     mutation.mutate(params, {
       onSettled: () => {
@@ -459,7 +460,7 @@ const AdminProduct = () => {
         //   newType: "",
         //   countInStock: "",
         // });
-        handleCancel()
+        handleCancel();
       },
     });
   };

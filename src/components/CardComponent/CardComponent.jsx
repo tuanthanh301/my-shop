@@ -33,8 +33,9 @@ const CardComponent = (props) => {
           alt="example"
           src={image}
         />
-      }
-      onClick={() => handleDetailsProduct()}
+      } 
+      onClick={() => countInStock !== 0 && handleDetailsProduct(id)}
+      disabled={countInStock === 0}
     >
       <img style={{width: 200, position: "absolute", top: 20, left: -1}} src="https://salt.tikicdn.com/ts/upload/12/e2/4a/c5226426ee9429b0050449ae5403c9cf.png" alt=" "/>
       <StyleNameProduct>{name}</StyleNameProduct>

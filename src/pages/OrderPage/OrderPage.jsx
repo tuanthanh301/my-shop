@@ -9,6 +9,7 @@ import {
   WrapperPriceDiscount,
   WrapperRight,
   WrapperStylerHeader,
+  WrapperStylerHeaderDelivery,
   WrapperTotal,
 } from "./style";
 import { Checkbox, Form } from "antd";
@@ -32,6 +33,8 @@ import { useMutationHook } from "../../hooks/useMutationHook";
 import Loading from "../../components/LoadingComponent/Loading";
 import { updateUser } from "../../redux/slides/userSlide";
 import { useNavigate } from "react-router-dom";
+import Step from "../../components/StepComponent/StepComponent";
+import StepComponent from "../../components/StepComponent/StepComponent";
 
 const OrderPage = () => {
   const navigate = useNavigate();
@@ -57,7 +60,6 @@ const OrderPage = () => {
       setListChecked([...listChecked, e.target.value]);
     }
   };
-  const handleChangeOut = () => {};
   const handleOnChangeCheckAll = (e) => {
     if (e.target.checked) {
       const newListChecked = [];
@@ -69,7 +71,6 @@ const OrderPage = () => {
       setListChecked([]);
     }
   };
-  const handleOnChangeCheckOut = (e) => {};
   const handleChangeCount = (type, idProduct, currentAmount) => {
     if (type === "increase") {
       dispatch(increaseAmount({ idProduct }));
@@ -109,10 +110,9 @@ const OrderPage = () => {
     }
   }, [isOpenModalUpdateInfo]);
 
-  const handleChangeAddress = () =>{
+  const handleChangeAddress = () => {
     setIsOpenModalUpdateInfo(true);
-
-  }
+  };
 
   const priceMemo = useMemo(() => {
     const result = order?.orderItemsSelected?.reduce((total, cur) => {
@@ -132,17 +132,21 @@ const OrderPage = () => {
   }, [order]);
 
   const deliveryPriceMemo = useMemo(() => {
-    if (priceMemo > 20000000) {
-      return 0;
-    } else if (priceMemo === 0) {
-      return 0;
-    } else {
+    if (priceMemo > 20000000 && priceMemo < 25000000) {
       return 45000;
+    } else if (priceMemo >= 25000000) {
+      return 0;
+    } else if (order?.orderItemsSelected.length === 0) {
+      return 0;
+    }else {
+      return 95000;
     }
-  }, [order]);
- const totalPriceMemo = useMemo(() =>{
-    return Number(priceMemo) - Number(priceDiscountMemo) + Number(deliveryPriceMemo)
-  },[priceMemo, priceDiscountMemo, deliveryPriceMemo])
+  }, [priceMemo]);
+  const totalPriceMemo = useMemo(() => {
+    return (
+      Number(priceMemo) - Number(priceDiscountMemo) + Number(deliveryPriceMemo)
+    );
+  }, [priceMemo, priceDiscountMemo, deliveryPriceMemo]);
   const handleRemoveAllOrders = () => {
     if (listChecked?.length >= 1) {
       dispatch(removeAllOrderProduct({ listChecked }));
@@ -164,7 +168,7 @@ const OrderPage = () => {
     } else if (!user?.phone || !user?.address || !user?.name || !user.city) {
       setIsOpenModalUpdateInfo(true);
     } else {
-      navigate('/payment')
+      navigate("/payment");
     }
   };
   const { isLoading, data } = mutationUpdate;
@@ -203,12 +207,29 @@ const OrderPage = () => {
       [e.target.name]: e.target.value,
     });
   };
+  const itemsDelivery = [
+    {
+      title: '95.000 VNĐ',
+      description: 'Dưới 20.000.000 VNĐ',
+    },
+    {
+      title: '45.000 VNĐ',
+      description: 'Từ 20.000.000 VNĐ đến 25.000.000 VNĐ',
+    },
+    {
+      title: '0 VNĐ',
+      description: 'Trên 25.000.000 VNĐ',
+    },
+  ]
   return (
     <div style={{ background: "#f5f5fa", width: "100%", height: "100vh" }}>
       <div style={{ width: "1270px", height: "100%", margin: "0 auto" }}>
-        <h3 style={{marginTop: 0, marginLeft: "10px"}}> Giỏ hàng</h3>
+        <h3 style={{ marginTop: 0, marginLeft: "10px" }}> Giỏ hàng</h3>
         <div style={{ display: "flex", justifyContent: "center" }}>
           <WrapperLeft>
+            <WrapperStylerHeaderDelivery>
+              <StepComponent items={itemsDelivery} current={deliveryPriceMemo === 45000 ? 1 : deliveryPriceMemo === 95000 ? 0 : order?.orderItemsSelected?.length === 0 ? 0 : 2}/>
+            </WrapperStylerHeaderDelivery>
             <WrapperStylerHeader>
               <span style={{ display: "inline-block", width: "390px" }}>
                 <Checkbox
@@ -255,7 +276,7 @@ const OrderPage = () => {
                         src={order?.image}
                         style={{
                           width: "77px",
-                          height: "f79px",
+                          height: "77px",
                           objectFit: "cover",
                         }}
                       />
@@ -353,9 +374,15 @@ const OrderPage = () => {
               <WrapperInfo>
                 <div>
                   <span>Địa chỉ giao hàng: </span>
-                  <span style={{color: 'blue'}}>{`${user?.address}, ${user?.city}`}</span>
-                  <span onClick={handleChangeAddress} style={{fontWeight: 'bold', cursor: 'pointer'}}>Thay đổi</span>
-
+                  <span
+                    style={{ color: "blue" }}
+                  >{`${user?.address}, ${user?.city}`}</span>
+                  <span
+                    onClick={handleChangeAddress}
+                    style={{ fontWeight: "bold", cursor: "pointer" }}
+                  >
+                    Thay đổi
+                  </span>
                 </div>
               </WrapperInfo>
               <WrapperInfo>
@@ -448,82 +475,82 @@ const OrderPage = () => {
           </WrapperRight>
         </div>
       </div>
-        <ModalComponent
-          title="Cập nhật thông tin giao hàng"
-          open={isOpenModalUpdateInfo}
-          onCancel={handleCancelUpdate}
-          onOk={handleUpdateInforUser}
+      <ModalComponent
+        title="Cập nhật thông tin giao hàng"
+        open={isOpenModalUpdateInfo}
+        onCancel={handleCancelUpdate}
+        onOk={handleUpdateInforUser}
+      >
+        <Form
+          form={form}
+          name="basic"
+          labelCol={{ span: 4 }}
+          wrapperCol={{ span: 20 }}
+          // onFinish={onUpdateUser}
+          autoComplete="on"
         >
-          <Form
-            form={form}
-            name="basic"
-            labelCol={{ span: 4 }}
-            wrapperCol={{ span: 20 }}
-            // onFinish={onUpdateUser}
-            autoComplete="on"
+          <Form.Item
+            label="Name"
+            name="name"
+            rules={[{ required: true, message: "Please input your name!" }]}
           >
-            <Form.Item
-              label="Name"
+            <InputComponents
+              value={stateUserDetails.name}
+              onChange={handleOnChangeDetails}
               name="name"
-              rules={[{ required: true, message: "Please input your name!" }]}
-            >
-              <InputComponents
-                value={stateUserDetails.name}
-                onChange={handleOnChangeDetails}
-                name="name"
-              />
-            </Form.Item>
+            />
+          </Form.Item>
 
-            <Form.Item
-              label="City"
+          <Form.Item
+            label="City"
+            name="city"
+            rules={[
+              {
+                required: true,
+                message: "Please input your city!",
+              },
+            ]}
+          >
+            <InputComponents
+              value={stateUserDetails.city}
+              onChange={handleOnChangeDetails}
               name="city"
-              rules={[
-                {
-                  required: true,
-                  message: "Please input your city!",
-                },
-              ]}
-            >
-              <InputComponents
-                value={stateUserDetails.city}
-                onChange={handleOnChangeDetails}
-                name="city"
-              />
-            </Form.Item>
-            <Form.Item
-              label="Phone"
+            />
+          </Form.Item>
+          <Form.Item
+            label="Phone"
+            name="phone"
+            rules={[
+              {
+                required: true,
+                message: "Please input your phone number!",
+              },
+            ]}
+          >
+            <InputComponents
+              value={stateUserDetails.phone}
+              onChange={handleOnChangeDetails}
               name="phone"
-              rules={[
-                {
-                  required: true,
-                  message: "Please input your phone number!",
-                },
-              ]}
-            >
-              <InputComponents
-                value={stateUserDetails.phone}
-                onChange={handleOnChangeDetails}
-                name="phone"
-              />
-            </Form.Item>
-            <Form.Item
-              label="Address"
+            />
+          </Form.Item>
+          <Form.Item
+            label="Address"
+            name="address"
+            rules={[
+              {
+                required: true,
+                message: "Please input your address!",
+              },
+            ]}
+          >
+            <InputComponents
+              value={stateUserDetails.address}
+              onChange={handleOnChangeDetails}
               name="address"
-              rules={[
-                {
-                  required: true,
-                  message: "Please input your address!",
-                },
-              ]}
-            >
-              <InputComponents
-                value={stateUserDetails.address}
-                onChange={handleOnChangeDetails}
-                name="address"
-              />
-            </Form.Item>
-          </Form>
-        </ModalComponent>
+            />
+          </Form.Item>
+        </Form>
+      </ModalComponent>
     </div>
   );
 };

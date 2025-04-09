@@ -6,8 +6,7 @@ import {
   WrapperRight,
   WrapperTotal,
 } from "./style";
-import { Checkbox, Form, Radio } from "antd";
-import { DeleteOutlined, MinusOutlined, PlusOutlined } from "@ant-design/icons";
+import { Form, Radio } from "antd";
 import ButtonComponent from "../../components/ButtonComponent/ButtonComponent";
 import ModalComponent from "../../components/ModalComponent/ModalComponent";
 import { useDispatch, useSelector } from "react-redux";
@@ -21,10 +20,13 @@ import * as message from "../../components/Message/Message";
 import { useMutationHook } from "../../hooks/useMutationHook";
 import Loading from "../../components/LoadingComponent/Loading";
 import { updateUser } from "../../redux/slides/userSlide";
+import { useNavigate } from "react-router-dom";
+import { removeAllOrderProduct } from "../../redux/slides/orderSlide";
 
 const PaymentPage = () => {
   const order = useSelector((state) => state.order);
   const user = useSelector((state) => state.user);
+  const navigate = useNavigate();
   const [delivery, setDelivery] = useState("fast"); // Mặc định là "fast"
   const [payment, setPayment] = useState("later_money"); // Mặc định là "later_money"
 
@@ -131,11 +133,6 @@ const PaymentPage = () => {
           totalPrice: totalPriceMemo,
           user: user?.id,
         },
-        // {
-        //   onSuccess: () => {
-        //     message.success("Đặt hàng thành công");
-        //   },
-        // }
       );
     }
   };
@@ -143,7 +140,20 @@ const PaymentPage = () => {
   const { data: dataAddOrder, isLoading: isLoadingAddOrder, isSuccess, isError } = mutationAddOrder;
   useEffect(() => {
       if (isSuccess && dataAddOrder?.status === "OK") {
+        const arrayOrdered = []
+        order?.orderItemsSelected?.forEach(element => {
+          arrayOrdered.push(element.product)
+        })
+        dispatch(removeAllOrderProduct({listChecked: arrayOrdered}))
         message.success("Đặt hàng thành công");
+        navigate('/orderSuccess', {
+          state: {
+            delivery,
+            payment,
+            orders: order?.orderItemsSelected,
+            totalPriceMemo: totalPriceMemo
+          }
+        })
       } else if (isError) {
         message.error();
       }
@@ -221,10 +231,10 @@ const PaymentPage = () => {
                 <div style={{ width: "100%", padding: 0, margin: 0}}>Chọn phương thức thanh toán</div>
                 <WrapperRadio onChange={handlePayment} value={payment}>
                   <Radio value="later_money">
-                    Thanh toán tiền mặt khi nhận hàng{" "}
+                    Thanh toán tiền mặt khi nhận hàng
                   </Radio>
                   <Radio value='credit_card'>
-                    Thanh toán tiền mặt khi nhận hàng{" "}
+                    Thanh toán bằng thẻ
                   </Radio>
                 </WrapperRadio>
               </div>

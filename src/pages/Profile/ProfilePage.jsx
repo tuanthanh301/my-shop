@@ -19,16 +19,26 @@ import { UploadOutlined } from "@ant-design/icons";
 import { getBase64 } from "../../ultils";
 
 const ProfilePage = () => {
-  const user = useSelector((state) => state.user);
   const [email, setEmail] = useState("");
   const [name, setName] = useState("");
   const [phone, setPhone] = useState("");
   const [address, setAddress] = useState("");
   const [avatar, setAvatar] = useState("");
+  const [stateUserDetails, setStateUserDetails] = useState({
+      name: "",
+      email: "",
+      phone: "",
+      isAdmin: false,
+      avatar: "",
+      address: ""
+    });
+  const user = useSelector((state) => state.user);
   const mutation = useMutationHook((data) => {
     const { id, access_token, ...rests } = data;
-    UserService.updateUser(id, rests, access_token);
+    const res = UserService.updateUser(id, rests, access_token);
+    return res;
   });
+  
   const dispatch = useDispatch();
   const { data, isLoading, isSuccess, isError } = mutation;
 
@@ -83,6 +93,8 @@ const ProfilePage = () => {
       access_token: user?.access_token,
     });
   };
+ 
+
 
   return (
     <div style={{ width: "1270px", margin: "0 auto", height: "500px" }}>

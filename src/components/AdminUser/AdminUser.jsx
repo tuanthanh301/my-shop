@@ -19,16 +19,13 @@ import { useSelector } from "react-redux";
 import ModalComponent from "../ModalComponent/ModalComponent";
 // import Search from "antd/es/transfer/search";
 const AdminUser = () => {
-  const [isModalOpen, setIsModalOpen] = useState(false);
   const [rowSelected, setRowSelected] = useState("");
   const [isOpenDrawer, setIsOpenDrawer] = useState(false);
   const [isLoadingUpdate, setIsLoadingUpdate] = useState(false);
   const [isModalOpenDelete, setIsModalOpenDelete] = useState(false);
+  
   const user = useSelector((state) => state?.user);
-
   const searchInput = useRef(null);
-
- 
   const [stateUserDetails, setStateUserDetails] = useState({
     name: "",
     email: "",

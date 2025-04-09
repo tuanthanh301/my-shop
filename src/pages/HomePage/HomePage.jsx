@@ -21,7 +21,7 @@ const HomePage = () => {
   const searchProduct = useSelector((state) => state?.product?.search);
   const searchDebounce = useDebounce(searchProduct, 500);
   // const [loading, setLoading] = useState(false);
-  const [limit, setLimit] = useState(5);
+  const [limit, setLimit] = useState(10);
   const [typeProducts, setTypeProducts] = useState([]);
 
   const fetchProductAll = async (context) => {
@@ -58,16 +58,10 @@ const HomePage = () => {
       <div style={{ width: "1270px", margin: "0 auto" }}>
         <WrapperTypeProduct>
           {typeProducts.map((item) => {
-            return (
-              <TypeProduct name={item} key={item} />
-            );
+            return <TypeProduct name={item} key={item} />;
           })}
         </WrapperTypeProduct>
       </div>
-      {/* <div
-        className="body"
-        style={{ width: "1270px", backgroundColor: "#efefef" }}
-      > */}
       <div
         id="container"
         style={{
@@ -133,10 +127,7 @@ const HomePage = () => {
             onClick={() => setLimit((prev) => prev + 5)}
           />
         </div>
-
-        {/* <NavBarComponent/> */}
       </div>
-      {/* </div> */}
     </Loading>
   );
 };
