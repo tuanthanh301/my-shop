@@ -68,18 +68,18 @@ const OrderPage = () => {
       });
       setListChecked(newListChecked);
     } else {
-      setListChecked([]);
+      setListChecked([]);  
     }
   };
-  const handleChangeCount = (type, idProduct, currentAmount) => {
+  const handleChangeCount = (type, idProduct, limited) => {
     if (type === "increase") {
-      dispatch(increaseAmount({ idProduct }));
-    } else if (type === "decrease") {
-      if (currentAmount > 1) {
-        dispatch(decreaseAmount({ idProduct }));
+      if (!limited) {
+        dispatch(increaseAmount({ idProduct }));
       }
     } else {
-      dispatch(decreaseAmount({ idProduct }));
+      if (!limited) {
+        dispatch(decreaseAmount({ idProduct }));
+      }
     }
   };
   const handleDeleteOrder = (idProduct) => {
@@ -123,14 +123,14 @@ const OrderPage = () => {
 
   const priceDiscountMemo = useMemo(() => {
     const result = order?.orderItemsSelected?.reduce((total, cur) => {
-      return total + cur.discount * cur.amount;
+      const totalDiscount = cur.discount ? cur.discount : 0;
+      return total + (priceMemo * (totalDiscount * cur.amount)) / 100;
     }, 0);
     if (Number(result)) {
       return result;
     }
     return 0;
   }, [order]);
-
   const deliveryPriceMemo = useMemo(() => {
     if (priceMemo > 20000000 && priceMemo < 25000000) {
       return 45000;
@@ -138,7 +138,7 @@ const OrderPage = () => {
       return 0;
     } else if (order?.orderItemsSelected.length === 0) {
       return 0;
-    }else {
+    } else {
       return 95000;
     }
   }, [priceMemo]);
@@ -209,18 +209,18 @@ const OrderPage = () => {
   };
   const itemsDelivery = [
     {
-      title: '95.000 VNĐ',
-      description: 'Dưới 20.000.000 VNĐ',
+      title: "95.000 VNĐ",
+      description: "Dưới 20.000.000 VNĐ",
     },
     {
-      title: '45.000 VNĐ',
-      description: 'Từ 20.000.000 VNĐ đến 25.000.000 VNĐ',
+      title: "45.000 VNĐ",
+      description: "Từ 20.000.000 VNĐ đến 25.000.000 VNĐ",
     },
     {
-      title: '0 VNĐ',
-      description: 'Trên 25.000.000 VNĐ',
+      title: "0 VNĐ",
+      description: "Trên 25.000.000 VNĐ",
     },
-  ]
+  ];
   return (
     <div style={{ background: "#f5f5fa", width: "100%", height: "100vh" }}>
       <div style={{ width: "1270px", height: "100%", margin: "0 auto" }}>
@@ -228,7 +228,18 @@ const OrderPage = () => {
         <div style={{ display: "flex", justifyContent: "center" }}>
           <WrapperLeft>
             <WrapperStylerHeaderDelivery>
-              <StepComponent items={itemsDelivery} current={deliveryPriceMemo === 45000 ? 1 : deliveryPriceMemo === 95000 ? 0 : order?.orderItemsSelected?.length === 0 ? 0 : 2}/>
+              <StepComponent
+                items={itemsDelivery}
+                current={
+                  deliveryPriceMemo === 45000
+                    ? 1
+                    : deliveryPriceMemo === 95000
+                    ? 0
+                    : order?.orderItemsSelected?.length === 0
+                    ? 0
+                    : 2
+                }
+              />
             </WrapperStylerHeaderDelivery>
             <WrapperStylerHeader>
               <span style={{ display: "inline-block", width: "390px" }}>
@@ -318,7 +329,8 @@ const OrderPage = () => {
                             handleChangeCount(
                               "decrease",
                               order?.product,
-                              order?.amount
+                              order?.amount === 1
+                              
                             )
                           }
                         >
@@ -327,8 +339,11 @@ const OrderPage = () => {
                           />
                         </button>
                         <WrapperInputNumber
-                          defaultValue={order?.amount || 0}
+                          defaultValue={order?.amount}
+                          value={order?.amount}
                           size="small"
+                          min={1}
+                          max={order?.countInStock}
                         >
                           {order?.amount || 0}
                         </WrapperInputNumber>
@@ -340,7 +355,12 @@ const OrderPage = () => {
                             cursor: "pointer",
                           }}
                           onClick={() =>
-                            handleChangeCount("increase", order?.product)
+                            handleChangeCount(
+                              "increase",
+                              order?.product,
+                              order?.amount === order.countInStock,
+                              order?.amount === 1
+                            )
                           }
                         >
                           <PlusOutlined
@@ -418,7 +438,9 @@ const OrderPage = () => {
                       fontSize: "14px",
                       fontWeight: "bold",
                     }}
-                  >{`${priceDiscountMemo}%`}</span>
+                  >
+                    {convertPrice(priceDiscountMemo)}
+                  </span>
                 </div>
                 <div
                   style={{

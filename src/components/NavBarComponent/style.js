@@ -23,3 +23,10 @@ export const WrapperTextPrice = styled.div`
   background-color: #ccc;
   width: fit-content;
 `;
+export const WrapperTypeProduct = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  justify-content: flex-start;
+  height: 44px;
+`;

@@ -1,14 +1,27 @@
 import { Checkbox, Rate } from "antd";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import {
   WrapperContent,
   WrapperLabelText,
   WrapperTextPrice,
+  WrapperTypeProduct,
   WrapperValue,
 } from "./style";
+import TypeProduct from "../TypeProduct/TypeProduct";
+import * as ProductService from "../../services/ProductService";
 
 const NavBarComponent = () => {
   const onChange = () => {};
+  const [typeProducts, setTypeProducts] = useState([]);
+  const fetchAllTypeProduct = async () => {
+      const res = await ProductService.getAllTypeProduct();
+      if (res?.status === "OK") {
+        setTypeProducts(res?.data);
+      }
+  };
+  useEffect(() => {
+      fetchAllTypeProduct();
+    }, []);
   const renderContent = (type, options) => {
     switch (type) {
       case "text":
@@ -18,7 +31,8 @@ const NavBarComponent = () => {
       case "checkbox":
         return (
           <Checkbox.Group
-            style={{ width: "100%", display: "flex", flexDirection: "column" }}xq
+            style={{ width: "100%", display: "flex", flexDirection: "column" }}
+            xq
             onChange={onChange}
           >
             {options.map((option) => {
@@ -51,9 +65,13 @@ const NavBarComponent = () => {
     <div>
       <WrapperLabelText>Danh mục sản phẩm</WrapperLabelText>
       <WrapperContent>
-        {renderContent("text", ["Dell", "Asus", "Macbook"])}
+        {/* {renderContent("text", ["Dell", "Asus", "Macbook"])} */}
+        <div>
+          {typeProducts.map((item) => {
+            return <TypeProduct name={item} key={item} />;
+          })}
+        </div>
       </WrapperContent>
-     
     </div>
   );
 };

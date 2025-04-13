@@ -11,7 +11,7 @@ const ProductDetailsPage = () => {
         style={{
           width: "100%",
           padding: "0",
-          background: "#efefef",
+          // background: "#efefef",
           height: "1000px",
         }}
       >

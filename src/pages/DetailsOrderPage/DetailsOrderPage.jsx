@@ -96,10 +96,8 @@ const DetailsOrderPage = () => {
             <WrapperLabel>HÌNH THỨC THANH TOÁN</WrapperLabel>
             <WrapperContentInfor>
               <div className="payment-info">
-                {" "}
-                {orderContant[data?.paymentMethod]}
+                {orderContant.payment[data?.paymentMethod]}
               </div>
-              <div className="payment-info"> Thanh toán thẻ </div>
               <div className="status-payment">
                 {data?.isPaid ? "Đã thanh toán" : "Chưa thanh toán"}
               </div>
@@ -121,6 +119,7 @@ const DetailsOrderPage = () => {
             <WrapperItemLabel>Giảm giá</WrapperItemLabel>
           </div>
           {data?.orderItem?.map((order) => {
+            console.log('order',order)
             return (
               <WrapperProduct>
                 <WrapperNameProduct>
@@ -149,7 +148,7 @@ const DetailsOrderPage = () => {
                 <WrapperItem>{convertPrice(order.price)}</WrapperItem>
                 <WrapperItem style={{marginLeft: '80px'}}>{order?.amount}</WrapperItem>
                 <WrapperItem>
-                  {order?.discount ? convertPrice(order?.discount) : "0 VNĐ"}
+                  {order?.discount ? convertPrice(priceMemo * order?.discount / 100) : "0 VNĐ"}
                 </WrapperItem>
               </WrapperProduct>
             );

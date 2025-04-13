@@ -102,7 +102,7 @@ const OrderSuccess = () => {
                       fontSize: "24px",
                       fontWeight: "bold",
                     }}>
-                Tổng thiệt hại: {convertPrice(state?.totalPriceMemo)}
+                Tổng tiền: {convertPrice(state?.totalPriceMemo)}
               </span>
             </div>
           </WrapperContainer>

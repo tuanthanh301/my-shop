@@ -31,6 +31,7 @@ const initialState = {
   paidAt: "",
   isDelivered: false,
   deliveredAt: "",
+  isSuccessOrder: false,
 };
 
 export const orderSlide = createSlice({
@@ -43,11 +44,22 @@ export const orderSlide = createSlice({
         (item) => item?.product === orderItem.product
       );
       if (itemOrder) {
-        itemOrder.amount += orderItem?.amount;
+        if (itemOrder.amount <= itemOrder.countInStock) {
+          itemOrder.amount += orderItem?.amount;
+          state.isSuccessOrder = true;
+        } else {
+          state.isErrorOrder = true
+        }
       } else {
         state.orderItem.push(orderItem);
+        state.isSuccessOrder = true;
       }
     },
+    resetOrder: (state) => {
+      state.isErrorOrder = false;
+      state.isSuccessOrder = false;
+    },
+
     increaseAmount: (state, action) => {
       const { idProduct } = action.payload;
       const itemOrder = state?.orderItem?.find(
@@ -113,6 +125,7 @@ export const orderSlide = createSlice({
 // Action creators are generated for each case reducer function
 export const {
   addOrderProduct,
+  resetOrder,
   increaseAmount,
   decreaseAmount,
   removeOrderProduct,
