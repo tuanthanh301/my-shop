@@ -53,7 +53,6 @@ const SignUpPage = () => {
       password,
       confirmPassword
     });
-    // console.log("sign-up", email, password, confirmPassword);
   };
   return (
     <div

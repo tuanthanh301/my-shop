@@ -1,3 +1,5 @@
+import { orderContant } from "./contant";
+
 export const isJsonString = (data) => {
     try {
         JSON.parse(data)
@@ -48,3 +50,78 @@ export const convertPrice = (price) => {
         return null
     }
 }
+export const convertDataChart = (data, type) =>{
+    try {
+        const object = {}
+        Array.isArray(data) && data.forEach((opt) => {
+            console.log('opt', opt, type)
+            console.log('opt', opt, type)
+            if(!object[opt[type]]){
+                object[opt[type]] = 1
+            } else {
+                object[opt[type]] += 1
+                console.log('ádasdasdsad',object[opt[type]], typeof(object[opt[type]]))
+            }
+        })
+        const results = Array.isArray(Object.keys(object)) && Object.keys(object).map((item) => {
+            return {
+                name: orderContant.payment[item],
+                value: object[item]
+            }
+        })
+        return results
+    } catch(e) {
+        return []
+    }
+}
+// export const initFacebookSDK = () => {
+//     if (window.FB){
+//         window.FB.XFBML.parse();
+//     }
+//     let locale = "vi_VN";
+//     window.fbAsyncInit = function () {
+//         window.FB.init({
+//             appId: process.env.REACT_APP_FB_ID,
+//             cookie: true,
+//             xfbml: true,
+//             version: 'v8.6'
+//         })
+//     }
+//     (function (d, s, id) {
+//         console.log(s);
+//         var js,
+//             fjs = d.getElementsByTagName(s)[0];
+//         if (d.getElementsByTagName(id)) return;
+//         js = d.createElement(s);
+//         js.id = id;
+//         js.src = `//connect.facebook.net/${locale}/sdk.js`;
+//         fjs.parentNode.insertBefore(js,fjs);
+//     })(document, 'script', "facebook-jssdk");
+// }
+export const initFacebookSDK = () => {
+    if (window.FB) {
+      window.FB.XFBML.parse();
+    }
+  
+    let locale = "vi_VN";
+  
+    window.fbAsyncInit = function () {
+      window.FB.init({
+        appId: process.env.REACT_APP_FB_ID,
+        cookie: true,
+        xfbml: true,
+        version: "v8.6",
+      });
+    };
+  
+    (function (d, s, id) {
+      let js,
+        fjs = d.getElementsByTagName(s)[0];
+      if (d.getElementById(id)) return; // ✅ sửa ở đây
+      js = d.createElement(s);
+      js.id = id;
+      js.src = `https://connect.facebook.net/${locale}/sdk.js`;
+      fjs.parentNode.insertBefore(js, fjs);
+    })(document, "script", "facebook-jssdk");
+  };
+  

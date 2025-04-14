@@ -18,7 +18,8 @@ export const WrapperButtonMore = styled(ButtonComponent)`
   } 
   width: 100%;
   text-align: center;
-  cursor: ${(props) => props.disabled ? 'not-allowed' : 'pointer'}
+  cursor: ${(props) => props.disabled ? 'not-allowed' : 'pointer'};
+  margin-bottom: 50px;
 
 `;
 export const WrapperProducts = styled.div`

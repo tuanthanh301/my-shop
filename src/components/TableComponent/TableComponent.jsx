@@ -22,7 +22,6 @@ const TableComponent = (props) => {
     },
   };
   const handleDeleteAll = () => {
-    console.log("IDs to delete:", rowSelectedKeys);
     handleDeleteMany(rowSelectedKeys);
   };
   const handleExportExcel = () => {

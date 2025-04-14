@@ -125,7 +125,6 @@ const AdminProduct = () => {
   //     form.setFieldsValue(stateProductDetails);
   //   }
   // }, [form, stateProductDetails]);
-  console.log("state", stateProductDetails, stateProduct);
   useEffect(() => {
     if (rowSelected && isOpenDrawer) {
       setIsLoadingUpdate(true);

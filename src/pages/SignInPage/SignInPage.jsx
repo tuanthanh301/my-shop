@@ -40,7 +40,6 @@ const SignInPage = () => {
   // const [loading, setLoading] = useState(false);
   const { data, isLoading, isSuccess } = mutation;
   useEffect(() =>{
-    console.log('location',location)
     if(isSuccess){
       if(location?.state){
         navigate(location?.state)
@@ -49,6 +48,7 @@ const SignInPage = () => {
       }
       navigate('/')
       localStorage.setItem('access_token', JSON.stringify(data?.access_token))
+
       if (data?.access_token) {
         const decoded = jwtDecode(data?.access_token)
         if(decoded?.id){
@@ -66,7 +66,6 @@ const SignInPage = () => {
       email,
       password,
     });
-    console.log("sign-in", email, password);
   };
   return (
     <div

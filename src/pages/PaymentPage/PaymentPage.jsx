@@ -239,7 +239,6 @@ const PaymentPage = () => {
       setSdkReady(true);
     };
     document.body.appendChild(script);
-    console.log("data", data);
   };
   useEffect(() => {
     if (!window.paypal) {
@@ -381,7 +380,7 @@ const PaymentPage = () => {
             {payment === "paypal" && sdkReady ? (
               <div style={{ width: "360px", marginLeft: "40px" }}>
                 <PayPalButton
-                  amount={totalPriceMemo / 30000}
+                  amount={Math.round(totalPriceMemo / 30000)}
                   // shippingPreference="NO_SHIPPING" // default is "GET_FROM_FILE"
                   onSuccess={onSuccessPaypal}
                   onError={() => {

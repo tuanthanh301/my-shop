@@ -6,13 +6,14 @@ const ProductDetailsPage = () => {
   const { id } = useParams();
   const navigate = useNavigate();
   return (
-    <div style={{ width: "1270px", margin: "auto" }}>
+    <div style={{ width: "100%", margin: "auto", background: '#efefef' }}>
       <div
         style={{
-          width: "100%",
+          width: "1270px",
           padding: "0",
           // background: "#efefef",
           height: "1000px",
+          margin: "auto"
         }}
       >
         <h3 style={{ marginTop: "0px" }}>

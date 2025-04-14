@@ -162,7 +162,6 @@ const OrderPage = () => {
     return res;
   });
   const handleAddCard = () => {
-    console.log("user", user);
     if (!order?.orderItemsSelected.length) {
       message.error("Vui lòng chọn sản phẩm");
     } else if (!user?.phone || !user?.address || !user?.name || !user.city) {
@@ -269,7 +268,7 @@ const OrderPage = () => {
             <WrapperListOrder>
               {order?.orderItem?.map((order) => {
                 return (
-                  <WrapperItemOrder>
+                  <WrapperItemOrder key={order?.product}>
                     <div
                       style={{
                         width: "390px",

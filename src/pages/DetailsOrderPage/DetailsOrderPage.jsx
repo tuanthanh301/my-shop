@@ -119,7 +119,6 @@ const DetailsOrderPage = () => {
             <WrapperItemLabel>Giảm giá</WrapperItemLabel>
           </div>
           {data?.orderItem?.map((order) => {
-            console.log('order',order)
             return (
               <WrapperProduct>
                 <WrapperNameProduct>

@@ -20,11 +20,9 @@ function App() {
   //   const res = await axios.get(
   //     `${process.env.REACT_APP_API_URL}/product/get-all`
   //   );
-  //   // console.log("res", res);
   //   return res.data
   // };
   // const query = useQuery({ queryKey: ['todos'], queryFn: fetchApi })
-  // console.log('query',query)
 
   const dispatch = useDispatch();
   const [isLoading, setIsLoading] = useState(false);

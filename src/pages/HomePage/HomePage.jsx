@@ -23,7 +23,7 @@ const HomePage = () => {
   // const [loading, setLoading] = useState(false);
   const [limit, setLimit] = useState(10);
   const [typeProducts, setTypeProducts] = useState([]);
-  
+  const initialLimit = 10;
   const fetchProductAll = async (context) => {
     const limit = context?.queryKey && context?.queryKey[1];
     const search = context?.queryKey && context?.queryKey[2];
@@ -55,7 +55,7 @@ const HomePage = () => {
   }, []);
   return (
     <Loading isLoading={isLoading}>
-      <div style={{ width: "1270px", margin: "0 auto" }}>
+      <div style={{ width: "1270px", margin: "0 auto", height: "100%" }}>
         <WrapperTypeProduct>
           {typeProducts.map((item) => {
             return <TypeProduct name={item} key={item} />;
@@ -126,6 +126,21 @@ const HomePage = () => {
             styleTextButton={{ color: "rgb(11, 116, 229)", fontWeight: 500 }}
             onClick={() => setLimit((prev) => prev + 5)}
           />
+          {/* {products?.data?.length > initialLimit && (
+            <WrapperButtonMore
+              textButton="Ẩn bớt"
+              type="outline"
+              style={{
+                border: "1px solid rgb(11, 116, 229)",
+                width: "240px",
+                height: "38px",
+                borderRadius: "4px",
+                color: "rgb(11, 116, 229)",
+              }}
+              styleTextButton={{ color: "rgb(11, 116, 229)", fontWeight: 500 }}
+              onClick={() => setLimit(initialLimit)}
+            />
+          )} */}
         </div>
       </div>
     </Loading>

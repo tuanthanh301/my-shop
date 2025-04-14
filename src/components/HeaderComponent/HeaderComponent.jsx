@@ -95,7 +95,7 @@ const HeaderComponent = ({ isHiddenSearch = false, isHiddenCart = false }) => {
   return (
     <div
       style={{
-        width: "100vw",
+        width: "100%",
         background: "rgb(26,148,255)",
         display: "flex",
         justifyContent: "center",

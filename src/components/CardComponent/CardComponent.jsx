@@ -28,14 +28,14 @@ const CardComponent = (props) => {
     <WrapperCardStyle
       hoverable
       style={{ width: "235px", header: { width: "200px", height: "200px" }}}
+      // bodyStyle={{padding: '10px'}}
       cover={
         <img
           alt="example"
           src={image}
         />
       } 
-      onClick={() => countInStock !== 0 && handleDetailsProduct(id)}
-      disabled={countInStock === 0}
+      onClick={() => handleDetailsProduct(id)}
     >
       <img style={{width: 200, position: "absolute", top: 20, left: -1}} src="https://salt.tikicdn.com/ts/upload/12/e2/4a/c5226426ee9429b0050449ae5403c9cf.png" alt=" "/>
       <StyleNameProduct>{name}</StyleNameProduct>
@@ -44,7 +44,7 @@ const CardComponent = (props) => {
           <span>{rating}</span>{" "}
           <StarFilled style={{ fontSize: "12px", color: "rgb(253, 216, 54)" }} />
         </span>
-        <WrapperStyleTextSold> | Đã bán {sold || 100}+</WrapperStyleTextSold>
+        <WrapperStyleTextSold> | Đã bán {sold}+</WrapperStyleTextSold>
       </WrapperReportText>
       <WrapperPriceText>
       <span style={{marginRight: "8px"}}>{convertPrice(price)}</span>
