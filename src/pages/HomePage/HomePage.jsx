@@ -55,7 +55,7 @@ const HomePage = () => {
   }, []);
   return (
     <Loading isLoading={isLoading}>
-      <div style={{ width: "1270px", margin: "0 auto", height: "100%" }}>
+      <div style={{ width: "1270px", margin: "0 auto", height: "fit-content" }}>
         <WrapperTypeProduct>
           {typeProducts.map((item) => {
             return <TypeProduct name={item} key={item} />;
@@ -65,7 +65,7 @@ const HomePage = () => {
       <div
         id="container"
         style={{
-          height: "1000px",
+          height: "auto",
           width: "1270px",
           margin: "0 auto",
         }}

@@ -6,10 +6,10 @@ const DefaultComponent = ({ children }) => {
   return (
     <div style={{ display: 'flex', flexDirection: 'column', minHeight: '100vh' }}>
       <HeaderComponent />
-      <main style={{ flex: 1 }}>
+      <main>
         {children}
       </main>
-      {/* <FooterComponent /> */}
+      <FooterComponent />
     </div>
   );
 };
