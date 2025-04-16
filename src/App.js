@@ -9,7 +9,7 @@ import { jwtDecode } from "jwt-decode";
 // import * as UserService from "../../services/UserService";
 import * as UserService from "./services/UserService";
 import { useDispatch, useSelector } from "react-redux";
-import { resetUser, updateUser } from "./redux/slides/userSlide";
+import { updateUser } from "./redux/slides/userSlide";
 import Loading from "./components/LoadingComponent/Loading";
 
 function App() {
@@ -38,6 +38,7 @@ function App() {
   const handleDecoded = () => {
     let storageData =
       user?.access_token || localStorage.getItem("access_token");
+    // let storageData = localStorage.getItem("access_token");
     let decoded = {};
     if (storageData && isJsonString(storageData) && !user?.access_token) {
       storageData = JSON.parse(storageData);
@@ -50,11 +51,10 @@ function App() {
       const currentTime = new Date();
       const { decoded } = handleDecoded();
       let storageRefreshToken = localStorage.getItem("refresh_token");
-      const refreshToken = JSON.parse(storageRefreshToken);
-      const decodedRefreshToken = jwtDecode(refreshToken);
+      const decodeRefreshToken = jwtDecode(storageRefreshToken);
       if (decoded?.exp < currentTime.getTime() / 1000) {
-        if (decodedRefreshToken?.exp > currentTime.getTime() / 1000) {
-          const data = await UserService.refreshToken(refreshToken);
+        if (decodeRefreshToken?.exp > currentTime.getTime() / 1000) {
+          const data = await UserService.refreshToken();
           config.headers["token"] = `Bearer ${data?.access_token}`;
         } else {
           dispatch(resetUser())
@@ -70,13 +70,7 @@ function App() {
     let storageRefreshToken = localStorage.getItem("refresh_token");
     const refreshToken = JSON.parse(storageRefreshToken);
     const res = await UserService.getDetailsUser(id, token);
-    dispatch(
-      updateUser({
-        ...res?.data,
-        access_token: token,
-        refreshToken: refreshToken,
-      })
-    );
+    dispatch(updateUser({ ...res?.data, access_token: token, refreshToken }));
   };
   return (
     <div>
