@@ -23,7 +23,8 @@ const MyOrderPage = () => {
   const fetchMyOrder = async () => {
     const res = await OrderService.getOrderbyUserId({
       id: state?.id,
-      user: state?.token,
+      // user: state?.token,
+      access_token: state?.token,
     });
     return res.data;
   };

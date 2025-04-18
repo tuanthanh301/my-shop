@@ -14,12 +14,12 @@ const FooterComponent = () => {
                     </FooterTitleInformation>
                     <FooteracSectionList>
                         <FooteracSectionItems>
-                            <FooteracSectionLink to="/mac">Mac</FooteracSectionLink>
-                            <FooteracSectionLink to="/ipad">Ipad</FooteracSectionLink>
-                            <FooteracSectionLink to="/iphone">Iphone</FooteracSectionLink>
-                            <FooteracSectionLink to="/watch">Watch</FooteracSectionLink>
-                            <FooteracSectionLink to="/airpod">Airpods</FooteracSectionLink>
-                            <FooteracSectionLink>TV & Home</FooteracSectionLink>
+                            <FooteracSectionLink to="/mac">Acer</FooteracSectionLink>
+                            <FooteracSectionLink to="/ipad">Asus</FooteracSectionLink>
+                            <FooteracSectionLink to="/iphone">Dell</FooteracSectionLink>
+                            <FooteracSectionLink to="/watch">HP</FooteracSectionLink>
+                            <FooteracSectionLink to="/airpod">LG</FooteracSectionLink>
+                            <FooteracSectionLink>Lenovo</FooteracSectionLink>
 
                         </FooteracSectionItems>
                     </FooteracSectionList>
@@ -34,13 +34,13 @@ const FooterComponent = () => {
                     </FooterTitleInformation>
                     <FooteracSectionList>
                         <FooteracSectionItems>
-                            <FooteracSectionLink>Apple Music</FooteracSectionLink>
-                            <FooteracSectionLink>Apple TV+</FooteracSectionLink>
-                            <FooteracSectionLink>Apple Arcade</FooteracSectionLink>
+                            <FooteracSectionLink>TuanThanhShop Music</FooteracSectionLink>
+                            <FooteracSectionLink>TuanThanhShop TV+</FooteracSectionLink>
+                            <FooteracSectionLink>TuanThanhShop Arcade</FooteracSectionLink>
                             <FooteracSectionLink>Cloud</FooteracSectionLink>
-                            <FooteracSectionLink>Apple One</FooteracSectionLink>
-                            <FooteracSectionLink>Apple Books</FooteracSectionLink>
-                            <FooteracSectionLink>Apple Podcasts</FooteracSectionLink>
+                            <FooteracSectionLink>TuanThanhShop One</FooteracSectionLink>
+                            <FooteracSectionLink>TuanThanhShop Books</FooteracSectionLink>
+                            <FooteracSectionLink>TuanThanhShop Podcasts</FooteracSectionLink>
                             <FooteracSectionLink>App Store</FooteracSectionLink>
                         </FooteracSectionItems>
                     </FooteracSectionList>
@@ -51,7 +51,7 @@ const FooterComponent = () => {
                     </FooterTitleInformation>
                     <FooteracSectionList>
                         <FooteracSectionItems>
-                            <FooteracSectionLink>Manage Your Apple ID</FooteracSectionLink>
+                            <FooteracSectionLink>Manage Your TuanThanhShop ID</FooteracSectionLink>
                             <FooteracSectionLink>Cloud.com</FooteracSectionLink>
                         </FooteracSectionItems>
                     </FooteracSectionList>
@@ -65,7 +65,7 @@ const FooterComponent = () => {
                     </FooterTitleInformation>
                     <FooteracSectionList>
                         <FooteracSectionItems>
-                            <FooteracSectionLink>Apple and Business</FooteracSectionLink>
+                            <FooteracSectionLink>TuanThanhShop and Business</FooteracSectionLink>
                         </FooteracSectionItems>
                     </FooteracSectionList>
 
@@ -76,7 +76,7 @@ const FooterComponent = () => {
                     </FooterTitleInformation>
                     <FooteracSectionList>
                         <FooteracSectionItems>
-                            <FooteracSectionLink>Apple and Education</FooteracSectionLink>
+                            <FooteracSectionLink>TuanThanhShop and Education</FooteracSectionLink>
                         </FooteracSectionItems>
                     </FooteracSectionList>
 
@@ -87,8 +87,8 @@ const FooterComponent = () => {
                     </FooterTitleInformation>
                     <FooteracSectionList>
                         <FooteracSectionItems>
-                            <FooteracSectionLink>Apple in Healthcare</FooteracSectionLink>
-                            <FooteracSectionLink>Health on Apple Watch</FooteracSectionLink>
+                            <FooteracSectionLink>TuanThanhShop in Healthcare</FooteracSectionLink>
+                            <FooteracSectionLink>Health on TuanThanhShop Watch</FooteracSectionLink>
                         </FooteracSectionItems>
                     </FooteracSectionList>
                 </FooterContentDirectoryColumn>
@@ -96,7 +96,7 @@ const FooterComponent = () => {
                 <FooterContentDirectoryColumn>
                     <FooterTitleInformation>
                         <h3>
-                            Apple Values
+                            TuanThanhShop Values
                         </h3>
                     </FooterTitleInformation>
                     <FooteracSectionList>
@@ -118,7 +118,7 @@ const FooterComponent = () => {
                             <FooteracSectionLink>Investors</FooteracSectionLink>
                             <FooteracSectionLink>Ethics & Compliance</FooteracSectionLink>
                             <FooteracSectionLink>Events</FooteracSectionLink>
-                            <FooteracSectionLink>Contact Apple</FooteracSectionLink>
+                            <FooteracSectionLink>Contact TuanThanhShop</FooteracSectionLink>
                         </FooteracSectionItems>
                     </FooteracSectionList>
                 </FooterContentDirectoryColumn>
@@ -129,7 +129,7 @@ const FooterComponent = () => {
                 </FooterShop>
                 <hr style={{color: "gray"}}></hr>
                 <FooterCopyright>
-                Copyright © 2022 Apple Inc. All rights reserved.
+                Copyright © 2025 TuanThanhShop Inc. All rights reserved.
                 <FooterLocalLink>VietNam</FooterLocalLink>
                 </FooterCopyright>
             </FooterInformationShop>
