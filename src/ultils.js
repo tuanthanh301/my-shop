@@ -55,7 +55,6 @@ export const convertDataChart = (data, type) =>{
         const object = {}
         Array.isArray(data) && data.forEach((opt) => {
             console.log('opt', opt, type)
-            console.log('opt', opt, type)
             if(!object[opt[type]]){
                 object[opt[type]] = 1
             } else {
@@ -74,6 +73,7 @@ export const convertDataChart = (data, type) =>{
         return []
     }
 }
+
 // export const initFacebookSDK = () => {
 //     if (window.FB){
 //         window.FB.XFBML.parse();

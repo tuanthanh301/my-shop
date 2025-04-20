@@ -23,7 +23,7 @@ const AdminUser = () => {
   const [isOpenDrawer, setIsOpenDrawer] = useState(false);
   const [isLoadingUpdate, setIsLoadingUpdate] = useState(false);
   const [isModalOpenDelete, setIsModalOpenDelete] = useState(false);
-  
+
   const user = useSelector((state) => state?.user);
   const searchInput = useRef(null);
   const [stateUserDetails, setStateUserDetails] = useState({
@@ -32,56 +32,64 @@ const AdminUser = () => {
     phone: "",
     isAdmin: false,
     avatar: "",
-    address: ""
+    address: "",
   });
 
   const [form] = Form.useForm();
 
-   const mutationUpdate = useMutationHook((data) => {
-    const { id, token, ...stateUserDetails } = data;
-    const res = UserService.updateUser({
+  const mutationDeleted = useMutationHook((data) => {
+    const { id, access_token } = data;
+    const res = UserService.deleteUser({
       id,
-      token,
-      data: stateUserDetails, 
+      access_token,
     });
     return res;
   });
 
-  const mutationDeleted = useMutationHook((data) => {
-    const { id, token } = data;
-    const res = UserService.deleteUser({
-      id,
-      token,
-    });
-    return res;
-  });
-  const mutationDeletedMany = useMutationHook((data) => {
-      const { ids, token, } = data;
-      const res = UserService.deleteManyUser({
-        ids,
-        token,
-      });
-      return res;
-    });
   const getAllUsers = async () => {
     const res = await UserService.getAllUser(user?.access_token);
     return res;
   };
-  const fetchGetDetailsUser = async (rowSelected) => {
-    const res = await UserService.getDetailsUser(rowSelected);
-    if (res?.data) {
-      setStateUserDetails({
-        name: res?.data.name,
-        email: res?.data.email,
-        phone: res?.data.phone,
-        isAdmin: res?.data.isAdmin,
-        address: res?.data.address,
-        avatar: res?.data.avatar,
+  // const fetchGetDetailsUser = async (rowSelected) => {
+  //   const res = await UserService.getDetailsUser(rowSelected);
+  //   if (res?.data) {
+  //     setStateUserDetails({
+  //       name: res?.data.name,
+  //       email: res?.data.email,
+  //       phone: res?.data.phone,
+  //       isAdmin: res?.data.isAdmin,
+  //       address: res?.data.address,
+  //       avatar: res?.data.avatar,
 
-      });
+  //     });
+  //   }
+  //   setIsLoadingUpdate(false);
+  // };
+  const fetchGetDetailsUser = async (rowSelected) => {
+    setIsLoadingUpdate(true); // đặt loading true sớm
+    try {
+      const res = await UserService.getDetailsUser(
+        rowSelected,
+        user?.access_token
+      );
+      if (res?.data) {
+        setStateUserDetails({
+          name: res.data.name,
+          email: res.data.email,
+          phone: res.data.phone,
+          isAdmin: res.data.isAdmin,
+          address: res.data.address,
+          avatar: res.data.avatar,
+        });
+      }
+    } catch (error) {
+      console.error("Lỗi khi fetch chi tiết user:", error);
+      message.error("Không thể lấy thông tin người dùng!");
+    } finally {
+      setIsLoadingUpdate(false);
     }
-    setIsLoadingUpdate(false);
   };
+
   // useEffect(()=>{
   //   form.setFieldsValue(stateUserDetails)
   // },[form, stateUserDetails])
@@ -96,20 +104,57 @@ const AdminUser = () => {
       setIsLoadingUpdate(true);
       fetchGetDetailsUser(rowSelected);
     }
-  }, [rowSelected,isOpenDrawer  ]);
+  }, [rowSelected, isOpenDrawer]);
   const handleDetailsUser = () => {
     setIsOpenDrawer(true);
   };
+  // const handleDeleteManyUsers = (ids) => {
+  //   mutationDeletedMany.mutate(
+  //     { ids: ids, access_token: user?.access_token },
+  //     {
+  //       onSettled: () => {
+  //         queryUser.refetch();
+  //       },
+  //     }
+  //   );
+  // };
+  const mutationUpdate = useMutationHook((data) => {
+    const { id, access_token, ...stateUserDetails } = data;
+    const res = UserService.updateUser({
+      id,
+      access_token,
+      data: stateUserDetails,
+    });
+    return res;
+  });
+  const mutationDeletedMany = useMutationHook(({ ids, access_token }) => {
+    return UserService.deleteManyUser({ ids }, access_token);
+  });
+
   const handleDeleteManyUsers = (ids) => {
+    if (!ids?.length || !user?.access_token) {
+      return message.warning(
+        "Vui lòng chọn người dùng và đảm bảo đã đăng nhập."
+      );
+    }
+
     mutationDeletedMany.mutate(
-      { ids: ids, token: user?.access_token },
       {
+        ids,
+        access_token: user.access_token,
+      },
+      {
+        onSuccess: () => {},
+        onError: () => {
+          message.error("Xoá nhiều người dùng thất bại!");
+        },
         onSettled: () => {
           queryUser.refetch();
         },
       }
     );
   };
+
   // const { data, isLoading, isSuccess, isError } = mutation;
   const {
     data: dataUpdated,
@@ -133,7 +178,7 @@ const AdminUser = () => {
     queryKey: ["user"],
     queryFn: getAllUsers,
   });
-  const { isLoading: isLoadingUsers , data: users } = queryUser;
+  const { isLoading: isLoadingUsers, data: users } = queryUser;
   const renderAction = () => {
     return (
       <div>
@@ -272,7 +317,11 @@ const AdminUser = () => {
   const dataTable =
     users?.data?.length &&
     users?.data?.map((user) => {
-      return { ...user, key: user._id, isAdmin: user.isAdmin ? 'True' : 'False' };
+      return {
+        ...user,
+        key: user._id,
+        isAdmin: user.isAdmin ? "True" : "False",
+      };
     });
   useEffect(() => {
     if (isSuccessDeleted && dataDeleted?.status === "OK") {
@@ -314,7 +363,7 @@ const AdminUser = () => {
 
   const handleDeleteUser = () => {
     mutationDeleted.mutate(
-      { id: rowSelected, token: user?.access_token },
+      { id: rowSelected, access_token: user?.access_token },
       {
         onSettled: () => {
           queryUser.refetch();
@@ -335,7 +384,7 @@ const AdminUser = () => {
   //     name: "",
   //     email: "",
   //     phone: "",
-  //     isAdmin: false,      
+  //     isAdmin: false,
   //   });
   //   form.resetFields();
   // };
@@ -361,25 +410,35 @@ const AdminUser = () => {
       avatar: file.preview,
     });
   };
+  
+
   const onUpdateUser = () => {
     mutationUpdate.mutate(
       {
         id: rowSelected,
-        token: user?.access_token,
-        stateUserDetails,
+        access_token: user?.access_token,
+        data: stateUserDetails,
       },
       {
+        onSuccess: () => {
+          message.success("Cập nhật người dùng thành công!");
+        },
+        onError: () => {
+          message.error("Cập nhật người dùng thất bại!");
+        },
         onSettled: () => {
           queryUser.refetch();
         },
       }
     );
   };
+  
+
   return (
     <div style={{ width: "100%" }}>
       <WrapperHeader>Quản lý người dùng</WrapperHeader>
       <div style={{ marginTop: "20px" }}>
-        <TableComponent 
+        <TableComponent
           handleDeleteMany={handleDeleteManyUsers}
           columns={columns}
           isLoading={isLoadingUsers}
@@ -479,24 +538,24 @@ const AdminUser = () => {
             ]}
           >
             <WrapperUploadFile
-                onChange={handleOnChangeAvatarDetails}
-                maxCount={1}
-              >
-                <Button>Select File</Button>
-                {stateUserDetails?.avatar && (
-                  <img
-                    src={stateUserDetails?.avatar}
-                    style={{
-                      height: "60px",
-                      width: "60px",
-                      borderRadius: "50%",
-                      objectFit: "cover",
-                      marginLeft: "10px",
-                    }}
-                    alt="avatar"
-                  />
-                )}
-              </WrapperUploadFile>
+              onChange={handleOnChangeAvatarDetails}
+              maxCount={1}
+            >
+              <Button>Select File</Button>
+              {stateUserDetails?.avatar && (
+                <img
+                  src={stateUserDetails?.avatar}
+                  style={{
+                    height: "60px",
+                    width: "60px",
+                    borderRadius: "50%",
+                    objectFit: "cover",
+                    marginLeft: "10px",
+                  }}
+                  alt="avatar"
+                />
+              )}
+            </WrapperUploadFile>
             {/* <WrapperUploadFile
               fileList={
                 stateUserDetails.image

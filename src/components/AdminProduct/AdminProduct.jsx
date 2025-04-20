@@ -40,9 +40,9 @@ const AdminProduct = () => {
     rating: "",
     image: "",
     newType: "",
-  })
+  });
   const [stateProduct, setStateProduct] = useState(initial());
-  const [stateProductDetails, setStateProductDetails] = useState(initial())
+  const [stateProductDetails, setStateProductDetails] = useState(initial());
   const [form] = Form.useForm();
   const mutation = useMutationHook((data) => {
     const {
@@ -68,31 +68,24 @@ const AdminProduct = () => {
     return res;
   });
   const mutationUpdate = useMutationHook((data) => {
-    const { id, token, ...stateProductDetails } = data;
+    const { id, access_token, ...stateProductDetails } = data;
     const res = ProductService.updateProduct({
       id,
-      token,
+      access_token,
       data: stateProductDetails,
     });
     return res;
   });
 
   const mutationDeleted = useMutationHook((data) => {
-    const { id, token } = data;
+    const { id, access_token } = data;
     const res = ProductService.deleteProduct({
       id,
-      token,
+      access_token,
     });
     return res;
   });
-  const mutationDeletedMany = useMutationHook((data) => {
-    const { ids, token } = data;
-    const res = ProductService.deleteManyProduct({
-      ids,
-      token,
-    });
-    return res;
-  });
+
   const getAllProducts = async () => {
     const res = await ProductService.getAllProduct("", 100);
     return res;
@@ -134,10 +127,34 @@ const AdminProduct = () => {
   const handleDetailsProduct = () => {
     setIsOpenDrawer(true);
   };
+  // const mutationDeletedMany = useMutationHook((data) => {
+  //   const { ids, token } = data;
+  //   const res = ProductService.deleteManyProduct({
+  //     ids,
+  //     token,
+  //   });
+  //   return res;
+  // });
+  // const handleDeleteManyProducts = (ids) => {
+  //   mutationDeletedMany.mutate(
+  //     { ids: ids, token: user?.access_token },
+  //     {
+  //       onSettled: () => {
+  //         queryProduct.refetch();
+  //       },
+  //     }
+  //   );
+  // };
+  const mutationDeletedMany = useMutationHook(({ ids, access_token }) => {
+    return ProductService.deleteManyProduct({ ids }, access_token);
+  });
 
   const handleDeleteManyProducts = (ids) => {
     mutationDeletedMany.mutate(
-      { ids: ids, token: user?.access_token },
+      {
+        ids,
+        access_token: user?.access_token,
+      },
       {
         onSettled: () => {
           queryProduct.refetch();
@@ -145,6 +162,7 @@ const AdminProduct = () => {
       }
     );
   };
+
   const fetchAllTypeProduct = async () => {
     const res = await ProductService.getAllTypeProduct();
     return res;
@@ -401,18 +419,37 @@ const AdminProduct = () => {
     setIsModalOpenDelete(false);
   };
 
+  // const handleDeleteProduct = () => {
+  //   mutationDeleted.mutate(
+  //     { id: rowSelected, token: user?.access_token },
+  //     {
+  //       onSettled: () => {
+  //         queryProduct.refetch();
+  //       },
+  //       onSuccess: () => {
+  //         handleCancelDelete(); // Đóng modal sau khi xoá thành công
+  //       },
+  //       onError: () => {
+  //         message.error("Xoá sản phẩm thất bại!");
+  //       },
+  //     }
+  //   );
+  // };
   const handleDeleteProduct = () => {
     mutationDeleted.mutate(
-      { id: rowSelected, token: user?.access_token },
       {
-        onSettled: () => {
-          queryProduct.refetch();
-        },
+        id: rowSelected,
+        access_token: user?.access_token, // đảm bảo đúng key
+      },
+      {
         onSuccess: () => {
-          handleCancelDelete(); // Đóng modal sau khi xoá thành công
+          message.success();
+          handleCancelDelete(); // đóng modal sau thành công
+          queryProduct.refetch(); // refetch sau
         },
-        onError: () => {
-          message.error("Xoá sản phẩm thất bại!");
+        onError: (error) => {
+          console.error(error);
+          message.error("Xóa sản phẩm thất bại!");
         },
       }
     );
@@ -524,20 +561,59 @@ const AdminProduct = () => {
     }
   };
 
+  // const onUpdateProduct = () => {
+  //   mutationUpdate.mutate(
+  //     {
+  //       id: rowSelected,
+  //       token: user?.access_token,
+  //       stateProductDetails,
+  //     },
+  //     {
+  //       onSettled: () => {
+  //         queryProduct.refetch();
+  //       },
+  //     }
+  //   );
+  // };
+  // const onUpdateProduct = () => {
+  //   mutationUpdate.mutate(
+  //     {
+  //       id: rowSelected,
+  //       access_token: user?.access_token,
+  //       productData: stateProductDetails,
+  //     },
+  //     {
+  //       onSuccess: () => {
+  //         // handleCancelUpdate(); // nếu có modal hoặc reset form
+  //         queryProduct.refetch();
+  //       },
+  //       onError: () => {
+  //         message.error();
+  //       },
+  //     }
+  //   );
+  // };
   const onUpdateProduct = () => {
     mutationUpdate.mutate(
       {
         id: rowSelected,
-        token: user?.access_token,
-        stateProductDetails,
+        access_token: user?.access_token,
+        data: stateProductDetails,
       },
       {
+        onSuccess: (res) => {
+          message.success("Cập nhật sản phẩm thành công!");
+        },
+        onError: () => {
+          message.error("Cập nhật sản phẩm thất bại!");
+        },
         onSettled: () => {
           queryProduct.refetch();
         },
       }
     );
   };
+
   const handleChangeSelect = (value) => {
     setStateProduct({
       ...stateProduct,

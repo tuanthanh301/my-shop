@@ -26,7 +26,7 @@ const DetailsOrderPage = () => {
   const fetchDetailsOrder = async () => {
     const res = await OrderService.getDetailsOrder({
       id: id,
-      user: state?.token,
+      access_token: state?.token,
     });
     return res.data;
   };

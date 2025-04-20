@@ -10,6 +10,7 @@ import { useSelector } from "react-redux";
 import { orderContant } from "../../contant";
 import PieChartComponent from "./PieChart";
 import { convertPrice } from "../../ultils";
+import  VerticalChart  from "./VerticalChart";
 // import Search from "antd/es/transfer/search";
 const AdminOrder = () => {
   const user = useSelector((state) => state?.user);
@@ -178,8 +179,13 @@ const AdminOrder = () => {
   return (
     <div style={{ width: "100%" }}>
       <WrapperHeader>Quản lý đơn hàng</WrapperHeader>
-      <div style={{ width: "250px", height: "250px" }}>
-        <PieChartComponent data={orders?.data} />
+      <div style={{display: 'flex', justifyContent: 'space-around'}}>
+        <div style={{ width: "350px", height: "250px" }}>
+          <PieChartComponent data={orders?.data} />
+        </div>
+        <div className="">
+          <VerticalChart/>
+        </div>
       </div>
       <div style={{ marginTop: "20px" }}>
         <TableComponent
