@@ -44,7 +44,7 @@ const CardComponent = (props) => {
           <span>{rating}</span>{" "}
           <StarFilled style={{ fontSize: "12px", color: "rgb(253, 216, 54)" }} />
         </span>
-        <WrapperStyleTextSold> | Đã bán {sold}+</WrapperStyleTextSold>
+        <WrapperStyleTextSold> | Đã bán {sold || 100}+</WrapperStyleTextSold>
       </WrapperReportText>
       <WrapperPriceText>
       <span style={{marginRight: "8px"}}>{convertPrice(price)}</span>

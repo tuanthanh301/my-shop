@@ -151,7 +151,7 @@ const MyOrderPage = () => {
       >
         <h4 style={{ marginTop: "0px" }}>Đơn hàng của tôi</h4>
         <WrapperListOrder>
-          {data?.map((order) => {
+          {data?.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt)).map((order) => {
             return (
               <WrapperItemOrder key={order?._id}>
                 <WrapperStatus>

@@ -25,20 +25,20 @@ const ProfilePage = () => {
   const [address, setAddress] = useState("");
   const [avatar, setAvatar] = useState("");
   const [stateUserDetails, setStateUserDetails] = useState({
-      name: "",
-      email: "",
-      phone: "",
-      isAdmin: false,
-      avatar: "",
-      address: ""
-    });
+    name: "",
+    email: "",
+    phone: "",
+    isAdmin: false,
+    avatar: "",
+    address: "",
+  });
   const user = useSelector((state) => state.user);
   const mutation = useMutationHook((data) => {
     const { id, access_token, ...rests } = data;
-    const res = UserService.updateUser(id, rests, access_token);
+    const res = UserService.updateUser({ id, rests, access_token });
     return res;
   });
-  
+
   const dispatch = useDispatch();
   const { data, isLoading, isSuccess, isError } = mutation;
 
@@ -49,6 +49,13 @@ const ProfilePage = () => {
     setAddress(user?.address);
     setAvatar(user?.avatar);
   }, [user]);
+  const handleGetDetailsUser = async (id, token) => {
+    const res = await UserService.getDetailsUser(id, token);
+    if (res?.data) {
+      dispatch(updateUser({ ...res.data, access_token: token }));
+    }
+  };
+  
   useEffect(() => {
     if (isSuccess) {
       message.success();
@@ -58,10 +65,6 @@ const ProfilePage = () => {
     }
   }, [isSuccess, isError]);
 
-  const handleGetDetailsUser = async (id, token) => {
-    const res = await UserService.getDetailsUser(id, token);
-    dispatch(updateUser({ ...res?.data, access_token: token }));
-  };
   const handleOnChangeEmail = (value) => {
     setEmail(value);
   };
@@ -74,12 +77,12 @@ const ProfilePage = () => {
   const handleOnChangeAddress = (value) => {
     setAddress(value);
   };
-  const handleOnChangeAvatar = async    ({ fileList }) => {
+  const handleOnChangeAvatar = async ({ fileList }) => {
     const file = fileList[0];
     if (!file.url && !file.preview) {
-        file.preview = await getBase64(file.originFileObj);
-      }
-    setAvatar(file.preview)
+      file.preview = await getBase64(file.originFileObj);
+    }
+    setAvatar(file.preview);
   };
 
   const handleUpdate = () => {
@@ -93,8 +96,6 @@ const ProfilePage = () => {
       access_token: user?.access_token,
     });
   };
- 
-
 
   return (
     <div style={{ width: "1270px", margin: "0 auto", height: "500px" }}>
@@ -188,12 +189,16 @@ const ProfilePage = () => {
             <Button icon={<UploadOutlined />}>Select File</Button>
           </WrapperUploadFile>
           {avatar && (
-            <img src={ avatar } style={{
-                height: '60px',
-                width: '60px',
-                borderRadius: '50%',
-                objectFit: 'cover'
-            }} alt='avatar'/>
+            <img
+              src={avatar}
+              style={{
+                height: "60px",
+                width: "60px",
+                borderRadius: "50%",
+                objectFit: "cover",
+              }}
+              alt="avatar"
+            />
           )}
           {/* <InputForm
             id="avatar"
@@ -207,7 +212,7 @@ const ProfilePage = () => {
             // size={50}
             style={{
               height: "30px",
-              marginLeft: '100px',
+              marginLeft: "100px",
               width: "fit-content",
               border: "1px solid rgb(26,148,255)",
               borderRadius: "4px",

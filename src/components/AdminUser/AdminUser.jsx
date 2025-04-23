@@ -50,21 +50,7 @@ const AdminUser = () => {
     const res = await UserService.getAllUser(user?.access_token);
     return res;
   };
-  // const fetchGetDetailsUser = async (rowSelected) => {
-  //   const res = await UserService.getDetailsUser(rowSelected);
-  //   if (res?.data) {
-  //     setStateUserDetails({
-  //       name: res?.data.name,
-  //       email: res?.data.email,
-  //       phone: res?.data.phone,
-  //       isAdmin: res?.data.isAdmin,
-  //       address: res?.data.address,
-  //       avatar: res?.data.avatar,
 
-  //     });
-  //   }
-  //   setIsLoadingUpdate(false);
-  // };
   const fetchGetDetailsUser = async (rowSelected) => {
     setIsLoadingUpdate(true); // đặt loading true sớm
     try {
@@ -89,10 +75,6 @@ const AdminUser = () => {
       setIsLoadingUpdate(false);
     }
   };
-
-  // useEffect(()=>{
-  //   form.setFieldsValue(stateUserDetails)
-  // },[form, stateUserDetails])
   useEffect(() => {
     if (stateUserDetails.name) {
       form.setFieldsValue(stateUserDetails);
@@ -177,6 +159,7 @@ const AdminUser = () => {
   const queryUser = useQuery({
     queryKey: ["user"],
     queryFn: getAllUsers,
+    staleTime: 0 // đảm bảo dữ liệu cũ không bị cache quá lâu
   });
   const { isLoading: isLoadingUsers, data: users } = queryUser;
   const renderAction = () => {
@@ -314,15 +297,21 @@ const AdminUser = () => {
       render: renderAction,
     },
   ];
-  const dataTable =
-    users?.data?.length &&
-    users?.data?.map((user) => {
-      return {
-        ...user,
-        key: user._id,
-        isAdmin: user.isAdmin ? "True" : "False",
-      };
-    });
+  // const dataTable =
+  //   users?.data?.length &&
+  //   users?.data?.map((user) => {
+  //     return {
+  //       ...user,
+  //       key: user._id,
+  //       isAdmin: user.isAdmin ? "True" : "False",
+  //     };
+  //   });
+  const dataTable = users?.data?.map((user) => ({
+    ...user,
+    key: user._id,
+    isAdmin: user.isAdmin ? "True" : "False",
+  }));
+
   useEffect(() => {
     if (isSuccessDeleted && dataDeleted?.status === "OK") {
       message.success();
@@ -350,12 +339,14 @@ const AdminUser = () => {
   };
   useEffect(() => {
     if (isSuccessUpdated && dataUpdated?.status === "OK") {
-      message.success();
+      // message.success();
+      queryUser.refetch(); // <- Cập nhật lại bảng sau khi update
       handleCloseDrawer();
     } else if (isErrorUpdated) {
       message.error();
     }
   }, [isSuccessUpdated]);
+  
 
   const handleCancelDelete = () => {
     setIsModalOpenDelete(false);
@@ -410,8 +401,6 @@ const AdminUser = () => {
       avatar: file.preview,
     });
   };
-  
-
   const onUpdateUser = () => {
     mutationUpdate.mutate(
       {
@@ -421,7 +410,7 @@ const AdminUser = () => {
       },
       {
         onSuccess: () => {
-          message.success("Cập nhật người dùng thành công!");
+          message.success('Cập nhật người dùng thành công!');
         },
         onError: () => {
           message.error("Cập nhật người dùng thất bại!");
@@ -433,7 +422,6 @@ const AdminUser = () => {
     );
   };
   
-
   return (
     <div style={{ width: "100%" }}>
       <WrapperHeader>Quản lý người dùng</WrapperHeader>

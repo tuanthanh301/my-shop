@@ -113,38 +113,18 @@ const AdminProduct = () => {
       form.setFieldsValue(initial());
     }
   }, [form, stateProductDetails, isModalOpen]);
-  // useEffect(() => {
-  //   if (stateProductDetails.name) {
-  //     form.setFieldsValue(stateProductDetails);
-  //   }
-  // }, [form, stateProductDetails]);
   useEffect(() => {
     if (rowSelected && isOpenDrawer) {
       setIsLoadingUpdate(true);
-      fetchGetDetailsProduct(rowSelected);
+      fetchGetDetailsProduct(rowSelected).then(() => {
+        form.setFieldsValue(stateProductDetails); // sau khi load
+      });
     }
   }, [rowSelected, isOpenDrawer]);
+  
   const handleDetailsProduct = () => {
     setIsOpenDrawer(true);
   };
-  // const mutationDeletedMany = useMutationHook((data) => {
-  //   const { ids, token } = data;
-  //   const res = ProductService.deleteManyProduct({
-  //     ids,
-  //     token,
-  //   });
-  //   return res;
-  // });
-  // const handleDeleteManyProducts = (ids) => {
-  //   mutationDeletedMany.mutate(
-  //     { ids: ids, token: user?.access_token },
-  //     {
-  //       onSettled: () => {
-  //         queryProduct.refetch();
-  //       },
-  //     }
-  //   );
-  // };
   const mutationDeletedMany = useMutationHook(({ ids, access_token }) => {
     return ProductService.deleteManyProduct({ ids }, access_token);
   });
@@ -366,7 +346,7 @@ const AdminProduct = () => {
   ];
   const dataTable =
     products?.data?.length &&
-    products?.data?.map((product) => {
+    products?.data?.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt)).map((product) => {
       return { ...product, key: product._id };
     });
   useEffect(() => {
@@ -386,7 +366,7 @@ const AdminProduct = () => {
   }, [isSuccessDeletedMany]);
   useEffect(() => {
     if (isSuccessDeleted && dataDeleted?.status === "OK") {
-      message.success();
+      // message.success();
       handleCancel();
     } else if (isErrorDeleted) {
       message.error();
@@ -408,7 +388,7 @@ const AdminProduct = () => {
   };
   useEffect(() => {
     if (isSuccessUpdated && dataUpdated?.status === "OK") {
-      message.success();
+      // message.success();
       handleCloseDrawer();
     } else if (isErrorUpdated) {
       message.error();
@@ -418,23 +398,6 @@ const AdminProduct = () => {
   const handleCancelDelete = () => {
     setIsModalOpenDelete(false);
   };
-
-  // const handleDeleteProduct = () => {
-  //   mutationDeleted.mutate(
-  //     { id: rowSelected, token: user?.access_token },
-  //     {
-  //       onSettled: () => {
-  //         queryProduct.refetch();
-  //       },
-  //       onSuccess: () => {
-  //         handleCancelDelete(); // Đóng modal sau khi xoá thành công
-  //       },
-  //       onError: () => {
-  //         message.error("Xoá sản phẩm thất bại!");
-  //       },
-  //     }
-  //   );
-  // };
   const handleDeleteProduct = () => {
     mutationDeleted.mutate(
       {
@@ -443,12 +406,11 @@ const AdminProduct = () => {
       },
       {
         onSuccess: () => {
-          message.success();
+          message.success("Xoá sản phẩm thành công");
           handleCancelDelete(); // đóng modal sau thành công
           queryProduct.refetch(); // refetch sau
         },
         onError: (error) => {
-          console.error(error);
           message.error("Xóa sản phẩm thất bại!");
         },
       }
@@ -548,7 +510,7 @@ const AdminProduct = () => {
       reader.onload = (e) => {
         setStateProductDetails((prev) => ({
           ...prev,
-          image: e.target.result, // Cập nhật URL ảnh mới
+          image: e.target.result, 
         }));
       };
       reader.readAsDataURL(file.originFileObj); // Chuyển file thành Data URL
@@ -560,39 +522,6 @@ const AdminProduct = () => {
       }));
     }
   };
-
-  // const onUpdateProduct = () => {
-  //   mutationUpdate.mutate(
-  //     {
-  //       id: rowSelected,
-  //       token: user?.access_token,
-  //       stateProductDetails,
-  //     },
-  //     {
-  //       onSettled: () => {
-  //         queryProduct.refetch();
-  //       },
-  //     }
-  //   );
-  // };
-  // const onUpdateProduct = () => {
-  //   mutationUpdate.mutate(
-  //     {
-  //       id: rowSelected,
-  //       access_token: user?.access_token,
-  //       productData: stateProductDetails,
-  //     },
-  //     {
-  //       onSuccess: () => {
-  //         // handleCancelUpdate(); // nếu có modal hoặc reset form
-  //         queryProduct.refetch();
-  //       },
-  //       onError: () => {
-  //         message.error();
-  //       },
-  //     }
-  //   );
-  // };
   const onUpdateProduct = () => {
     mutationUpdate.mutate(
       {
@@ -601,14 +530,12 @@ const AdminProduct = () => {
         data: stateProductDetails,
       },
       {
-        onSuccess: (res) => {
-          message.success("Cập nhật sản phẩm thành công!");
+        onSuccess: () => {
+          message.success("Cập nhật sản phẩm thành công");
+          queryProduct.refetch(); 
         },
         onError: () => {
-          message.error("Cập nhật sản phẩm thất bại!");
-        },
-        onSettled: () => {
-          queryProduct.refetch();
+          message.error();
         },
       }
     );

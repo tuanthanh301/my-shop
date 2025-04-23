@@ -97,6 +97,26 @@ const HomePage = () => {
               />
             );
           })}
+          {/* {products?.data
+            ?.slice() // tạo bản sao để không mutate dữ liệu gốc
+            .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt)) // sắp xếp theo thời gian tạo mới nhất
+            .map((product) => {
+              return (
+                <CardComponent
+                  key={product._id}
+                  countInStock={product.countInStock}
+                  description={product.description}
+                  image={product.image}
+                  name={product.name}
+                  price={product.price}
+                  rating={product.rating}
+                  type={product.type}
+                  discount={product.discount}
+                  sold={product.sold}
+                  id={product._id}
+                />
+              );
+            })} */}
         </WrapperProducts>
         <div
           style={{

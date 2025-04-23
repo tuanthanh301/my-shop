@@ -11,16 +11,23 @@ const TableComponent = (props) => {
     columns = [],
     handleDeleteMany,
   } = props;
-  const [rowSelectedKeys, setRowSelectedKeys] = useState("");
+  const [rowSelectedKeys, setRowSelectedKeys] = useState([]);
   const newColumnExport = useMemo( () => {
     const arr = columns.filter((col) => col.dataIndex !== 'action')
     return arr;
   }, [columns])
-  const rowSelection = {
-    onChange: (selectedRowKeys, selectedRows) => {
+  // const rowSelection = {
+  //   onChange: (selectedRowKeys, selectedRows) => {
+  //     setRowSelectedKeys(selectedRowKeys);
+  //   },
+  // };
+  const rowSelection = useMemo(() => ({
+    type: selectionType,
+    onChange: (selectedRowKeys) => {
       setRowSelectedKeys(selectedRowKeys);
     },
-  };
+  }), [selectionType]);
+  
   const handleDeleteAll = () => {
     handleDeleteMany(rowSelectedKeys);
   };
